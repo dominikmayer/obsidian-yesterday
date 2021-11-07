@@ -44,8 +44,10 @@ export class PurpleImage extends MarkdownRenderChild {
       const markdownItems = items.map(createMarkdownImage);
 
       const container = this.containerEl.createDiv();
-      container.addClass("image-grid");
-      MarkdownRenderer.renderMarkdown(markdownItems.join("\n"), container, null, null);
+      if (items.length > 1) {
+        container.addClass("image-grid");
+      }
+      MarkdownRenderer.renderMarkdown(markdownItems.join(""), container, null, null);
       this.containerEl.replaceWith(container);
     }
   }

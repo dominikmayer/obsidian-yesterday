@@ -1,0 +1,32 @@
+
+.image-grid {
+    display: flex;
+    flex-wrap: wrap;
+    width: 135%;
+    left: -20%;
+    margin-left: 0px !important;
+    /* transform: translateX(-50%); */
+    position: relative;
+    /* align-items: center;
+    justify-content: center; */
+  }
+  .image-grid figure {
+      flex-grow: 1;
+      margin: 2px !important;
+      height: 30vw;
+      position: relative;
+      overflow: hidden;
+  }
+  .image-grid img, .image-grid video {
+    height: 24vw;
+    margin: 0 2px 2px 0;
+    max-width: 100%;
+    /* min-width: 100%; */
+    vertical-align: bottom;
+    object-fit: cover;
+  }
+  
+  .image-grid::after {
+    content: '';
+    flex-grow: 1e4;
+  }
