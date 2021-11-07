@@ -1,25 +1,26 @@
 import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
+import { PurpleImage, PurpleEmoji } from "./purple"
 
 // Remember to rename these classes and interfaces!
 
-interface MyPluginSettings {
+interface PurpleSettings {
 	mySetting: string;
 }
 
-const DEFAULT_SETTINGS: MyPluginSettings = {
+const DEFAULT_SETTINGS: PurpleSettings = {
 	mySetting: 'default'
 }
 
-export default class MyPlugin extends Plugin {
-	settings: MyPluginSettings;
+export default class PurplePlugin extends Plugin {
+	settings: PurpleSettings;
 
 	async onload() {
 		await this.loadSettings();
 
 		// This creates an icon in the left ribbon.
-		const ribbonIconEl = this.addRibbonIcon('dice', 'Sample Plugin', (evt: MouseEvent) => {
+		const ribbonIconEl = this.addRibbonIcon('dice', 'Purple Message', (evt: MouseEvent) => {
 			// Called when the user clicks the icon.
-			new Notice('This is a notice!');
+			new Notice('Hola hola!');
 		});
 		// Perform additional things with the ribbon
 		ribbonIconEl.addClass('my-plugin-ribbon-class');
@@ -76,6 +77,29 @@ export default class MyPlugin extends Plugin {
 
 		// When registering intervals, this function will automatically clear the interval when the plugin is disabled.
 		this.registerInterval(window.setInterval(() => console.log('setInterval'), 5 * 60 * 1000));
+
+
+		this.registerMarkdownPostProcessor((element, context) => {
+			const paragraphs = element.querySelectorAll("p");
+	  
+			for (let index = 0; index < paragraphs.length; index++) {
+			  const paragraph = paragraphs.item(index);
+			  const text = paragraph.innerText.trim();
+			  const mediaExtensions = ['jpg', 'jpeg', 'png'];
+
+			  const isEmoji = text[0] === ":" && text[text.length - 1] === ":";
+			  const isImage = text[0] === "/" && mediaExtensions.some(extension => text.endsWith(extension));
+
+			  if (isImage) {
+				  context.addChild(new PurpleImage(paragraph, text));
+			  }
+	  
+			  if (isEmoji) {
+				context.addChild(new PurpleEmoji(paragraph, text));
+			  }
+			}
+		  });
+
 	}
 
 	onunload() {
@@ -108,9 +132,9 @@ class SampleModal extends Modal {
 }
 
 class SampleSettingTab extends PluginSettingTab {
-	plugin: MyPlugin;
+	plugin: PurplePlugin;
 
-	constructor(app: App, plugin: MyPlugin) {
+	constructor(app: App, plugin: PurplePlugin) {
 		super(app, plugin);
 		this.plugin = plugin;
 	}
