@@ -30,3 +30,11 @@
     content: '';
     flex-grow: 1e4;
   }
+
+  .nav-file-title[data-path$="todo.md"] .nav-file-title-content {
+    color: red;
+  }
+
+  .nav-file-title[data-path$="todo.md"] .nav-file-title-content:before {
+    content: "❗️ ";
+  }
