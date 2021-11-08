@@ -53,5 +53,9 @@ export class PurpleImage extends MarkdownRenderChild {
   }
 
   function createMarkdownImage(text: string) {
-    return "![[" + text.substring(1) + "]]"
+      if (text.length == 0) {
+          return ""
+      } else {
+        return "![[" + text.substring(1) + "]]"
+      }
   }
