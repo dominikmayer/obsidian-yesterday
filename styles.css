@@ -44,3 +44,8 @@
   .nav-file-title[data-path$='.jpeg'], .nav-file-title[data-path$='.jpg'], .nav-file-title[data-path$='.png'] {
     display: none;
   }
+
+  /* Hide comments */
+  .purple-comment, .purple-comment ~ div {
+    display: none;
+  }

@@ -89,6 +89,7 @@ export default class PurplePlugin extends Plugin {
 
 			  const isEmoji = text[0] === ":" && text[text.length - 1] === ":";
 			  const isImage = text[0] === "/" && mediaExtensions.some(extension => text.endsWith(extension));
+			  const isComment = text.startsWith("///");
 
 			  if (isImage) {
 				  context.addChild(new PurpleImage(paragraph, text));
@@ -96,6 +97,10 @@ export default class PurplePlugin extends Plugin {
 	  
 			  if (isEmoji) {
 				context.addChild(new PurpleEmoji(paragraph, text));
+			  }
+
+			  if (isComment) {
+				  paragraph.parentElement.addClass("purple-comment")
 			  }
 			}
 		  });
