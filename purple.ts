@@ -36,7 +36,6 @@ export class PurpleImage extends MarkdownRenderChild {
       super(containerEl);
   
       this.text = text;
-      console.log(text);
     }
   
     onload() {
