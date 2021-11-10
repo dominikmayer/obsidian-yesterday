@@ -1,5 +1,5 @@
 import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting, Vault } from 'obsidian';
-import { PurpleImage, PurpleEmoji} from "./purple"
+import { PurpleImage } from "./purple"
 import { PurpleDialog } from "./dialogs"
 import { exec } from 'child_process';
 import { appendFile } from 'fs';
@@ -38,7 +38,7 @@ export default class PurplePlugin extends Plugin {
 		});
 
 		// Perform additional things with the ribbon
-		newEntryRibbon.addClass('my-plugin-ribbon-class');
+		newEntryRibbon.addClass('purple-ribbon-class');
 
 		const toggleTodoRibbon = this.addRibbonIcon('checkmark', 'Toggle To Do', (evt: MouseEvent) => {
 			// Called when the user clicks the icon.
@@ -54,17 +54,9 @@ export default class PurplePlugin extends Plugin {
 		});
 
 		// This adds a status bar item to the bottom of the app. Does not work on mobile apps.
-		const statusBarItemEl = this.addStatusBarItem();
-		statusBarItemEl.setText('Status Bar Text');
+		// const statusBarItemEl = this.addStatusBarItem();
+		// statusBarItemEl.setText('Status Bar Text');
 
-		// This adds a simple command that can be triggered anywhere
-		this.addCommand({
-			id: 'open-sample-modal-simple',
-			name: 'Open sample modal (simple)',
-			callback: () => {
-				new SampleModal(this.app).open();
-			}
-		});
 		// This adds an editor command that can perform some operation on the current editor instance
 		this.addCommand({
 			id: 'sample-editor-command',
@@ -115,17 +107,15 @@ export default class PurplePlugin extends Plugin {
 			  const text = paragraph.innerText.trim();
 			  const mediaExtensions = ['jpg', 'jpeg', 'png'];
 
-			  const isEmoji = text[0] === ":" && text[text.length - 1] === ":";
 			  const isImage = text[0] === "/" && mediaExtensions.some(extension => text.endsWith(extension));
 			  const isComment = text.startsWith("///");
 			  const isDialog = text.startsWith(".") && text.contains(":");
+			  const isTodo = text.startsWith("++");
+			  const isDreamStart = text.startsWith("§§§");
+			  const isDreamEnd = text.endsWith("§§§");
 
 			  if (isImage) {
 				  context.addChild(new PurpleImage(paragraph, text));
-			  }
-	  
-			  if (isEmoji) {
-				context.addChild(new PurpleEmoji(paragraph, text));
 			  }
 
 			  if (isComment) {
@@ -134,7 +124,19 @@ export default class PurplePlugin extends Plugin {
 
 			  if (isDialog) {
 				context.addChild(new PurpleDialog(paragraph, text));
-			}
+			  }
+
+			  if (isTodo) {
+				paragraph.parentElement.addClass("purple-todo");
+			  }
+
+			  if (isDreamStart) {
+				paragraph.parentElement.addClass("purple-dream-start");
+			  }
+
+			  if (isDreamEnd) {
+				paragraph.parentElement.addClass("purple-dream-end");
+			  }
 			}
 		  });
 
@@ -201,11 +203,9 @@ export default class PurplePlugin extends Plugin {
 		if (file.basename.endsWith(" - todo")) {
 			const newPath = file.path.replace(" - todo", "");
 			this.app.fileManager.renameFile(file, newPath);
-			new Notice("Marked file as done")
 		} else {
 			const newPath = file.path.replace(file.basename, file.basename + " - todo");
 			this.app.fileManager.renameFile(file, newPath);
-			new Notice("Marked as open")
 		}
 	}
 }

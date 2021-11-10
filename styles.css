@@ -50,6 +50,13 @@
     display: none;
   }
 
+  .purple-todo, .purple-todo ~ div {
+    color: orange;
+  }
+
+  .purple-dream-start, .purple-dream-start ~ .purple-dream-end {
+    color: lightskyblue;
+  }
 
   p {
     /* Make sure the dialog is not displayed over the text */
