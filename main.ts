@@ -1,7 +1,6 @@
 import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting, Vault } from 'obsidian';
 import { PurpleImage } from "./purple"
 import { PurpleDialog } from "./dialogs"
-import { exec } from 'child_process';
 import { appendFile } from 'fs';
 
 
@@ -91,9 +90,9 @@ export default class PurplePlugin extends Plugin {
 
 		// If the plugin hooks up any global DOM events (on parts of the app that doesn't belong to this plugin)
 		// Using this function will automatically remove the event listener when this plugin is disabled.
-		this.registerDomEvent(document, 'click', (evt: MouseEvent) => {
-			// console.log('click', evt);
-		});
+		// this.registerDomEvent(document, 'click', (evt: MouseEvent) => {
+		// 	console.log('click', evt);
+		// });
 
 		// When registering intervals, this function will automatically clear the interval when the plugin is disabled.
 		this.registerInterval(window.setInterval(() => console.log('setInterval'), 5 * 60 * 1000));
@@ -225,11 +224,17 @@ function pathFromDate(date: Date) {
 	const root = this.app.vault.getRoot().path;
 
 	const year = date.getFullYear();
+	const decade = year.toString().substring(0, 3) + "0s";
+
 	const month = ("0" + (date.getMonth() + 1)).slice(-2);
 	const day = ("0" + date.getDate()).slice(-2);
-	const dateString = [year, month, day].join("-");
 
-	return root + dateString;
+	const fullMonth = [year, month].join("-");
+	const fullDate = [year, month, day].join("-");
+
+	const components = [decade, year, fullMonth, fullDate].join("/");
+
+	return root + components;
 }
 
 async function createFrontmatter(datetime: string, plugin: PurplePlugin): Promise<string> {
@@ -239,18 +244,21 @@ async function createFrontmatter(datetime: string, plugin: PurplePlugin): Promis
 	const latitude = location[0];
 	const longitude = location[1];
 
+	new Notice("Location: " + latitude + ", " + longitude);
+	const googleUrl = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + latitude + ',' + longitude + '&key=' + plugin.settings.googleAPIKey;
+	const googleResult = await runCommand("curl '" + googleUrl + "'");
+	const googleJson = JSON.parse(googleResult);
+	const address = googleJson.results[0].formatted_address;
+	new Notice("Location: " + address);
+
 	const darkSkyUrl = 'https://api.darksky.net/forecast/' + plugin.settings.darkSkyApiKey + '/' + latitude + ',' + longitude + '?exclude=minutely,hourly,daily,alerts,flags&lang=de&units=si';
 	const darkSkyResult = await runCommand("curl '" + darkSkyUrl + "'");
 	const darkSkyJson = JSON.parse(darkSkyResult);
-	
-    const googleUrl = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + latitude + ',' + longitude + '&key=' + plugin.settings.googleAPIKey;
-	const googleResult = await runCommand("curl '" + googleUrl + "'");
-	const googleJson = JSON.parse(googleResult);
-
+    
 	return `---
 date: ${datetime}
 location:
-    name: ${googleJson.results[0].formatted_address}
+    name: ${address}
     latitude: ${latitude}
     longitude: ${longitude}
 weather:
