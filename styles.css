@@ -45,6 +45,10 @@
     display: none;
   }
 
+  .nav-file-title.is-active {
+    background-color: #404040;
+  }
+
   /* Hide comments */
   .purple-comment, .purple-comment ~ div {
     display: none;
