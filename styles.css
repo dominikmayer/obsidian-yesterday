@@ -62,7 +62,7 @@
     color: lightskyblue;
   }
 
-  p {
+  div {
     /* Make sure the dialog is not displayed over the text */
     clear: both;
 
