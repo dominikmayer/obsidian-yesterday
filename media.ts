@@ -1,63 +1,72 @@
 import { MarkdownRenderChild, MarkdownRenderer, App, Modal } from "obsidian";
 
+/**
+ * Renders markdown images within a specified container element.
+ */
 export class YesterdayMedia extends MarkdownRenderChild {
   
-    text: string;
+  constructor(containerEl: HTMLElement, private text: string) {
+    super(containerEl);
+  }
   
-    constructor(containerEl: HTMLElement, text: string) {
-      super(containerEl);
-  
-      this.text = text;
-    }
-  
-    onload() {
-      const items = this.text.split("\n");
-      const markdownItems = items.map(createMarkdownImage);
+  /**
+   * On load, process the text to create and display markdown images.
+   */
+  onload() {
+    const items = this.text.split("\n").filter(text => text.length > 0);
+    const markdownItems = items.map(YesterdayMedia.createMarkdownImage);
 
-      const container = this.containerEl.createDiv();
-      if (items.length > 1) {
-        container.addClass("image-grid");
+    const container = this.containerEl.createDiv();
+    if (items.length > 1) {
+      container.addClass("image-grid");
+    }
+    MarkdownRenderer.renderMarkdown(markdownItems.join(""), container, null, null);
+    this.containerEl.replaceWith(container);
+  }
+
+  /**
+   * Converts a text line into markdown image syntax.
+   * @param {string} text - The text to convert.
+   * @returns {string} - The markdown image string.
+   */
+  private static createMarkdownImage(text: string): string {
+    return `![[${text.substring(1)}]]`;
+  }
+}
+
+/**
+ * Modal for displaying an image.
+ */
+export class ImageModal extends Modal {
+  constructor(app: App, private imgSrc: string) {
+    super(app);
+  }
+
+  /**
+   * Called when the modal is opened. Sets up the image and modal styles.
+   */
+  onOpen() {
+    const { contentEl } = this;
+    contentEl.createEl('img', {
+      attr: {
+        src: this.imgSrc,
+        style: 'width: 100%; height: 100%; object-fit: contain; object-position: center;'
       }
-      MarkdownRenderer.renderMarkdown(markdownItems.join(""), container, null, null);
-      this.containerEl.replaceWith(container);
+    });
 
-    }
+    Object.assign(this.modalEl.style, {
+      width: '100%',
+      height: '100%',
+      boxShadow: 'none'
+    });
+
+    this.modalEl.addEventListener('click', () => this.close());
   }
 
-  function createMarkdownImage(text: string) {
-      if (text.length == 0) {
-          return ""
-      } else {
-        return "![[" + text.substring(1) + "]]"
-      }
+  /**
+   * Called when the modal is closed. Cleans up by emptying the content element.
+   */
+  onClose() {
+    this.contentEl.empty();
   }
-
-  export class ImageModal extends Modal {
-    imgSrc: string;
-
-    constructor(app: App, imgSrc: string) {
-        super(app);
-        this.imgSrc = imgSrc;
-    }
-
-    onOpen() {
-      let {contentEl} = this;
-      let imgEl = contentEl.createEl('img', {
-          attr: {
-              src: this.imgSrc,
-              style: 'width: 100%; height: 100%; object-fit: contain; object-position: center;'
-          }
-      });
-
-      this.modalEl.style.width = '100%';
-      this.modalEl.style.height = '100%';
-      this.modalEl.style.boxShadow = 'none';
-
-      this.modalEl.addEventListener('click', () => this.close());
-  }
-
-    onClose() {
-      let { contentEl } = this;
-      contentEl.empty();
-    }
 }

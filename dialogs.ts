@@ -1,139 +1,79 @@
-import { MarkdownRenderChild, MarkdownRenderer } from "obsidian";
+import { MarkdownRenderChild } from "obsidian";
 
-  export class YesterdayDialog extends MarkdownRenderChild {
+// Define a class to handle dialog rendering in Markdown
+export class YesterdayDialog extends MarkdownRenderChild {
+  text: string;
+  speakersMap = new Map<string, boolean>();
+  lastSpeaker: string | null = null;
+  lastLineElement: HTMLElement | null = null;
 
-    text: string;
-  
-    constructor(containerEl: HTMLElement, text: string) {
-      super(containerEl);
-  
-      this.text = text;
-      console.log(text);
-    }
-  
-    onload() {
-      speakersMap.clear();
-      lastSpeaker = null;
-      lastLineElement = null;
-      const lines = this.text.split("\n");
-      console.log(lines);
+  constructor(containerEl: HTMLElement, text: string) {
+    super(containerEl);
+    this.text = text;
+  }
 
-      const dialogContainer = this.containerEl.createEl("ul");
-      dialogContainer.addClass("yesterday-dialog");
+  // Called when the component is loaded
+  onload() {
+    this.initializeDialog();
+  }
 
-      const markdownLines: string[] = lines.map(dissectDialogLine);
-      console.log(markdownLines);
-      
-      const reduceLines = lines.reduce(dialogReducer, dialogContainer);
-      console.log(reduceLines);
-      
-      // const container = this.containerEl.createDiv();
-      // if (items.length > 1) {
-      //   container.addClass("image-grid");
-      // }
-      // MarkdownRenderer.renderMarkdown(markdownItems.join(""), container, null, null);
-      this.containerEl.replaceWith(dialogContainer);
-    }
-}
+  // Initializes dialog processing
+  initializeDialog() {
+    this.speakersMap.clear();
+    this.lastSpeaker = null;
+    this.lastLineElement = null;
 
-var speakersMap = new Map();
+    const lines = this.text.split("\n");
+    const dialogContainer = this.containerEl.createEl("ul", { cls: "yesterday-dialog" });
 
-function createDialogLine(text: string, addClasses: string[] = []) {
+    lines.forEach(line => {
+      if (line.trim()) {
+        const lineElement = this.createDialogLine(line);
+        dialogContainer.appendChild(lineElement);
+      }
+    });
+
+    this.containerEl.replaceWith(dialogContainer);
+  }
+
+// Creates a dialog line element
+createDialogLine(text: string): HTMLElement {
   const line = createEl("li");
-  var speaker: string;
-  var comment: string;
-  var statement: string;
+  let [speaker, comment, statement] = this.dissectDialogLine(text);
 
-  text.replace(/\.?(\w.*?)\s?(\(.*\))?:(.*)/g, function(match: string, speakerPart: string, commentPart: string, statementPart: string) {
-      speaker = speakerPart;
-      comment = commentPart;
-      statement = statementPart;
-      return "";
-  });
+  // Determine if the speaker or comment has changed to decide on displaying them
+  const showSpeakerOrComment = !this.speakersMap.get(speaker) || comment;
+  if (showSpeakerOrComment) {
+      if (comment) {
+          const speakerElement = createEl("b", { text: speaker });
+          const commentElement = createEl("i", { text: ` ${comment.trim()}:` }); // Ensure comment is in italics
+          line.appendChild(speakerElement);
+          line.appendText(" "); // Add space between speaker and comment
+          line.appendChild(commentElement);
+      } else {
+          line.appendChild(createEl("b", { text: `${speaker}:` }));
+      }
+      line.appendChild(createEl("br")); // Ensure line break after speaker/comment
+  }
 
-  const speakerElement = createEl("b");
-  const commentElement = createEl("i");
-  const statementElement = createEl("span");
+  this.speakersMap.set(speaker, true); // Mark the speaker as shown
 
-  if (speaker.toLowerCase() == "ich") {
+  const statementElement = createEl("span", { text: statement });
+  line.appendChild(statementElement);
+
+  if (speaker.toLowerCase() === "ich") {
       line.addClass("my-dialog");
   } else {
       line.addClass("their-dialog");
   }
 
-  if (!speakersMap.has(speaker)) {
-    speakersMap.set(speaker, true);
-  }
-
-  if (speakersMap.get(speaker) || comment != null) {
-    if (comment == null) {
-      speakerElement.appendText(speaker + ":");
-      line.appendChild(speakerElement);
-  } else {
-    speakerElement.appendText(speaker);    
-    commentElement.appendText(" " + comment + ":");
-    line.appendChild(speakerElement);
-    line.appendChild(commentElement);
-  }
-  speakersMap.set(speaker, false);
-  line.appendChild(createEl("br"));
-  }
-
-  statementElement.appendText(statement);
-  line.appendChild(statementElement);
-
-  addClasses.forEach(cls => line.addClass(cls));
-
   return line;
 }
 
-let lastSpeaker: String = null;
-let lastLineElement: HTMLLIElement = null;
-
-function dialogReducer(previousValue: HTMLUListElement, currentValue: string) {
-  const lineElement = createDialogLine(currentValue);
-  const currentSpeaker = getCurrentSpeaker(currentValue); // You need to implement this
-  
-  if (lastSpeaker && lastSpeaker !== currentSpeaker) {
-    if (lastLineElement) {
-      lastLineElement.addClass("end-speech");
-    }
+  // Parses the dialog line to extract speaker, comment, and statement
+  dissectDialogLine(line: string): [string, string, string] {
+    const match = line.match(/\.?(\w.*?)\s?(\(.*\))?:(.*)/);
+    if (!match) return ["", "", ""]; // Return empty parts if the line does not match the expected format
+    return [match[1], match[2] || "", match[3]];
   }
-
-  lastSpeaker = currentSpeaker;
-  lastLineElement = lineElement;
-
-  previousValue.appendChild(lineElement);
-  return previousValue;
-}
-
-function getCurrentSpeaker(line: string): string {
-  let speaker = "";
-  line.replace(/\.?(\w.*?)\s?(\(.*\))?:(.*)/g, function(match: string, speakerPart: string) {
-    speaker = speakerPart;
-    return "";
-  });
-  return speaker;
-}
-
-function dissectDialogLine(line: string) {
-
-    console.log("Line: " + line);
-
-    var speaker;
-    var comment;
-    var text;
-    
-    line.replace(/\.?(\w.*?)\s?(\(.*\))?:(.*)/g, function(match: string, speakerPart: string, commentPart: string, textPart: string) {
-
-        speaker = speakerPart;
-        comment = commentPart;
-        text = textPart;
-        
-        return ""
-    });
-
-    console.log("Dissect: " + speaker + ", " + comment + ", " + text); //{speaker: speaker, comment: comment, text: text});
-
-    return speaker;
 }
