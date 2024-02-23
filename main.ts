@@ -1,5 +1,5 @@
 import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting, Vault, TFile } from 'obsidian';
-import { YesterdayImage } from "./yesterday"
+import { YesterdayMedia, ImageModal } from "./media"
 import { YesterdayDialog } from "./dialogs"
 import { appendFile } from 'fs';
 
@@ -113,6 +113,15 @@ export default class Yesterday extends Plugin {
 			})
 		);
 
+		this.registerDomEvent(document, 'click', (event: MouseEvent) => {
+			let target = event.target as HTMLElement;
+		
+			if (target.tagName === 'IMG' && target.closest('.media-embed')) {
+				let imgSrc = (target as HTMLImageElement).src;
+				new ImageModal(this.app, imgSrc).open();
+			}
+		});
+
 		// This adds an editor command that can perform some operation on the current editor instance
 		// this.addCommand({
 		// 	id: 'sample-editor-command',
@@ -171,7 +180,7 @@ export default class Yesterday extends Plugin {
 			  const isDreamEnd = text.endsWith("§§§");
 
 			  if (isImage) {
-				  context.addChild(new YesterdayImage(paragraph, text));
+				  context.addChild(new YesterdayMedia(paragraph, text));
 			  }
 
 			  if (isComment) {
