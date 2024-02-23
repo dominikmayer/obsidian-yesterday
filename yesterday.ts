@@ -1,6 +1,6 @@
 import { MarkdownRenderChild, MarkdownRenderer } from "obsidian";
 
-export class PurpleImage extends MarkdownRenderChild {
+export class YesterdayImage extends MarkdownRenderChild {
     static ALL_EMOJIS: Record<string, string> = {
       ":+1:": "👍",
       ":sunglasses:": "😎",

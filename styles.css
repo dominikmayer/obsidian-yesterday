@@ -50,15 +50,15 @@
   }
 
   /* Hide comments */
-  .purple-comment, .purple-comment ~ div {
+  .yesterday-comment, .yesterday-comment ~ div {
     display: none;
   }
 
-  .purple-todo, .purple-todo ~ div {
+  .yesterday-todo, .yesterday-todo ~ div {
     color: orange;
   }
 
-  .purple-dream-start, .purple-dream-start ~ .purple-dream-end {
+  .yesterday-dream-start, .yesterday-dream-start ~ .yesterday-dream-end {
     color: lightskyblue;
   }
 
@@ -70,7 +70,7 @@
     padding-bottom: 0 !important; */
 }
 
-ul.purple-dialog li {
+ul.yesterday-dialog li {
   display:inline-block;
   clear: both;
   padding: 5px 10px;
@@ -82,7 +82,7 @@ ul.purple-dialog li {
   /* font-family: Helvetica, Arial, sans-serif; */
 }
 
-ul.purple-dialog li.their-dialog {
+ul.yesterday-dialog li.their-dialog {
   background: #eee;
   color: #021310;
   float: left;
@@ -90,7 +90,7 @@ ul.purple-dialog li.their-dialog {
   border-bottom-right-radius: 15px;
 }
 
-ul.purple-dialog li.my-dialog {
+ul.yesterday-dialog li.my-dialog {
   float: right;
   text-align: right;
   background: #0084ff;
@@ -116,7 +116,7 @@ ul.purple-dialog li.my-dialog {
   border-bottom-left-radius: 5px;
 }
 
-.purple-dialog li:nth-last-child(1 of .my-dialog) {
+.yesterday-dialog li:nth-last-child(1 of .my-dialog) {
   border-bottom-right-radius: 5px;
   margin-bottom: 1em;
 } */
@@ -129,25 +129,25 @@ ul.purple-dialog li.my-dialog {
     border-bottom-left-radius: 15px;
 }
 
-.purple-dialog li:nth-child(1 of .my-dialog) {
+.yesterday-dialog li:nth-child(1 of .my-dialog) {
   border-top-right-radius: 15px;
 }
 
-.purple-dialog li:nth-child(1 of .their-dialog) {
+.yesterday-dialog li:nth-child(1 of .their-dialog) {
   border-top-left-radius: 15px;
 }
 
-.purple-dialog li:nth-last-child(1 of .their-dialog) {
+.yesterday-dialog li:nth-last-child(1 of .their-dialog) {
   border-bottom-left-radius: 15px;
   margin-bottom: 1em;
 }
 
-.purple-dialog li:nth-last-child(1 of .my-dialog) {
+.yesterday-dialog li:nth-last-child(1 of .my-dialog) {
   border-bottom-right-radius: 15px;
   margin-bottom: 1em;
 }
 
-.purple-dialog li:nth-last-child(1 of .their-dialog) {
+.yesterday-dialog li:nth-last-child(1 of .their-dialog) {
   border-bottom-left-radius: 15px;
   margin-bottom: 1em;
 }

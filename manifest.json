@@ -1,9 +1,9 @@
 {
-	"id": "obsidian-purple",
-	"name": "Purple Journal",
+	"id": "yesterday",
+	"name": "Yesterday",
 	"version": "1.0.0",
 	"minAppVersion": "0.12.0",
-	"description": "Enable rendering of Purple Journal files.",
+	"description": "Transforms Obsidian into a journal",
 	"author": "Dominik Mayer",
 	"authorUrl": "https://purple.parts",
 	"isDesktopOnly": false
