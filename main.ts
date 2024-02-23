@@ -87,7 +87,6 @@ export default class Yesterday extends Plugin {
 		this.registerMarkdownPostProcessor((element, context) => {
 			const paragraphs = Array.from(element.querySelectorAll("p"));
 
-
 			// Function to render and replace dream content
 			// const renderDream = (paragraph: HTMLParagraphElement) => {
 			// 	// Prepend and append formatting for blockquote
@@ -100,8 +99,6 @@ export default class Yesterday extends Plugin {
 
 			paragraphs.forEach((paragraph, index) => {
 				const text = paragraph.innerText.trim();
-				const isLastElement = index === paragraphs.length - 1;
-
 
 				const isImage = text[0] === "/" && mediaExtensions.some(extension => text.endsWith(extension));
 				const isComment = text.startsWith("///");
@@ -133,7 +130,6 @@ export default class Yesterday extends Plugin {
 					this.dreamContent += `> ${textWithoutMarkers}\n`;
 					if(!isDreamEnd) {
 						this.dreamContent += `> \n`;
-						// paragraph.remove();
 						this.dreamParagraphsToRemove.push(paragraph);
 					}
 				}
@@ -146,30 +142,10 @@ export default class Yesterday extends Plugin {
 					const container = paragraph.createDiv();
 					MarkdownRenderer.renderMarkdown(this.dreamContent, container, null, null);
 					paragraph.replaceWith(container);
-			}
-
-				if (isTodoStart && !this.inTodo) {
-					this.inTodo = true;
-					this.todoContent = "> [!yesterday-todo] To Do\n";
-				} 
-
-				if (this.inTodo) {					
-					let textWithoutMarkers = text.replace(/^\+\+|\+\+$/g, '').trim();
-					this.todoContent += `> ${textWithoutMarkers}\n`;
-					if(!isTodoEnd) {
-						this.todoContent += `> \n`;
-						this.todoParagraphsToRemove.push(paragraph);
-					}
 				}
 
-				if (isTodoEnd) {
-					this.inTodo = false;
-					this.todoParagraphsToRemove.forEach(element => {
-						element.remove();
-					});
-					const container = paragraph.createDiv();
-					MarkdownRenderer.renderMarkdown(this.todoContent, container, null, null);
-					paragraph.replaceWith(container);
+				if (isTodoStart) {
+					paragraph.parentElement.addClass("yesterday-todo");
 				}
 			});
 		});

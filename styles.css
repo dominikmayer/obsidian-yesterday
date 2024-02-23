@@ -42,6 +42,10 @@
   background-color: #404040;
 }
 
+.yesterday-todo, .yesterday-todo ~ div {
+  color: orange;
+}
+
 /* Hide comments */
 .yesterday-comment,
 .yesterday-comment~div {
