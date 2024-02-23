@@ -4,11 +4,11 @@ import { MarkdownRenderChild, MarkdownRenderer, App, Modal } from "obsidian";
  * Renders markdown images within a specified container element.
  */
 export class YesterdayMedia extends MarkdownRenderChild {
-  
+
   constructor(containerEl: HTMLElement, private text: string) {
     super(containerEl);
   }
-  
+
   /**
    * On load, process the text to create and display markdown images.
    */
@@ -17,9 +17,9 @@ export class YesterdayMedia extends MarkdownRenderChild {
     const markdownItems = items.map(YesterdayMedia.createMarkdownImage);
 
     const container = this.containerEl.createDiv();
-    if (items.length > 1) {
-      container.addClass("image-grid");
-    }
+    // if (items.length > 1) {
+    container.addClass("image-grid");
+    // }
     MarkdownRenderer.renderMarkdown(markdownItems.join(""), container, null, null);
     this.containerEl.replaceWith(container);
   }

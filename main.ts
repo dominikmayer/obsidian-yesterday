@@ -1,6 +1,8 @@
-import { App, Notice, Plugin, PluginSettingTab, Setting, Vault, TFile } from 'obsidian';
+import { App, MarkdownRenderer, Notice, Plugin, PluginSettingTab, Setting, Vault, TFile } from 'obsidian';
 import { YesterdayMedia, ImageModal } from "./media"
 import { YesterdayDialog } from "./dialogs"
+
+const mediaExtensions = ['jpg', 'jpeg', 'png'];
 
 interface YesterdaySettings {
 	// Define settings here if needed in the future
@@ -15,7 +17,7 @@ let todoCount = 0;
 export default class Yesterday extends Plugin {
 	settings: YesterdaySettings;
 
-	async onload() { 
+	async onload() {
 		await this.loadSettings();
 		this.addRibbonIcons();
 		this.addCommands();
@@ -23,7 +25,7 @@ export default class Yesterday extends Plugin {
 		this.addSettingTab(new YesterdaySettingTab(this.app, this));
 		this.registerMarkdownPostProcessors();
 		this.setStatusBar();
-		
+
 		// When registering intervals, this function will automatically clear the interval when the plugin is disabled.
 		this.registerInterval(window.setInterval(() => console.log('setInterval'), 5 * 60 * 1000));
 
@@ -39,7 +41,7 @@ export default class Yesterday extends Plugin {
 		const toggleTodoRibbon = this.addRibbonIcon('checkmark', 'Toggle To Do', (evt: MouseEvent) => {
 			// Called when the user clicks the icon.
 			this.toggleTodo();
-		});		
+		});
 	}
 
 	addCommands() {
@@ -62,10 +64,10 @@ export default class Yesterday extends Plugin {
 		});
 	}
 
-	handleImageClicks() {
+	handleImageClicks() {
 		this.registerDomEvent(document, 'click', (event: MouseEvent) => {
 			let target = event.target as HTMLElement;
-		
+
 			if (target.tagName === 'IMG' && target.closest('.media-embed')) {
 				let imgSrc = (target as HTMLImageElement).src;
 				new ImageModal(this.app, imgSrc).open();
@@ -73,47 +75,104 @@ export default class Yesterday extends Plugin {
 		});
 	}
 
+	inDream = false;
+	dreamContent = "";
+	dreamParagraphsToRemove: HTMLParagraphElement[] = [];
+
+	inTodo = false;
+	todoContent = "";
+	todoParagraphsToRemove: HTMLParagraphElement[] = [];
+
 	registerMarkdownPostProcessors() {
 		this.registerMarkdownPostProcessor((element, context) => {
-			const paragraphs = element.querySelectorAll("p");
-	  
-			for (let index = 0; index < paragraphs.length; index++) {
-			  const paragraph = paragraphs.item(index);
-			  const text = paragraph.innerText.trim();
-			  const mediaExtensions = ['jpg', 'jpeg', 'png'];
+			const paragraphs = Array.from(element.querySelectorAll("p"));
 
-			  const isImage = text[0] === "/" && mediaExtensions.some(extension => text.endsWith(extension));
-			  const isComment = text.startsWith("///");
-			  const isDialog = text.startsWith(".") && text.contains(":");
-			  const isTodo = text.startsWith("++");
-			  const isDreamStart = text.startsWith("§§§");
-			  const isDreamEnd = text.endsWith("§§§");
 
-			  if (isImage) {
-				  context.addChild(new YesterdayMedia(paragraph, text));
-			  }
+			// Function to render and replace dream content
+			// const renderDream = (paragraph: HTMLParagraphElement) => {
+			// 	// Prepend and append formatting for blockquote
+			// 	const formattedDream = `> [!info]\n>\n${dreamContent.split("\n").map(line => `> ${line}`).join("\n")}\n>`;
+			// 	// Render the transformed dream markdown
+			// 	MarkdownRenderer.renderMarkdown(formattedDream, paragraph, context.sourcePath, null);
+			// 	// Clear dream content after rendering
+			// 	dreamContent = "";
+			// };
 
-			  if (isComment) {
-				  paragraph.parentElement.addClass("yesterday-comment");
-			  }
+			paragraphs.forEach((paragraph, index) => {
+				const text = paragraph.innerText.trim();
+				const isLastElement = index === paragraphs.length - 1;
 
-			  if (isDialog) {
-				context.addChild(new YesterdayDialog(paragraph, text));
-			  }
 
-			  if (isTodo) {
-				paragraph.parentElement.addClass("yesterday-todo");
-			  }
+				const isImage = text[0] === "/" && mediaExtensions.some(extension => text.endsWith(extension));
+				const isComment = text.startsWith("///");
+				const isDialog = text.startsWith(".") && text.contains(":");
+				const isDreamStart = text.startsWith("§§§");
+				const isDreamEnd = text.endsWith("§§§");
+				const isTodoStart = text.startsWith("++");
+				const isTodoEnd = text.endsWith("++");
 
-			  if (isDreamStart) {
-				paragraph.parentElement.addClass("yesterday-dream-start");
-			  }
+				if (isImage) {
+					context.addChild(new YesterdayMedia(paragraph, text));
+				}
 
-			  if (isDreamEnd) {
-				paragraph.parentElement.addClass("yesterday-dream-end");
-			  }
+				if (isComment) {
+					paragraph.parentElement.addClass("yesterday-comment");
+				}
+
+				if (isDialog) {
+					context.addChild(new YesterdayDialog(paragraph, text));
+				}
+
+				if (isDreamStart && !this.inDream) {
+					this.inDream = true;
+					this.dreamContent = "> [!yesterday-dream] Dream\n";
+				} 
+
+				if (this.inDream) {					
+					let textWithoutMarkers = text.replace(/^§§§|§§§$/g, '').trim();
+					this.dreamContent += `> ${textWithoutMarkers}\n`;
+					if(!isDreamEnd) {
+						this.dreamContent += `> \n`;
+						// paragraph.remove();
+						this.dreamParagraphsToRemove.push(paragraph);
+					}
+				}
+
+				if (isDreamEnd) {
+					this.inDream = false;
+					this.dreamParagraphsToRemove.forEach(element => {
+						element.remove();
+					});
+					const container = paragraph.createDiv();
+					MarkdownRenderer.renderMarkdown(this.dreamContent, container, null, null);
+					paragraph.replaceWith(container);
 			}
-		  });
+
+				if (isTodoStart && !this.inTodo) {
+					this.inTodo = true;
+					this.todoContent = "> [!yesterday-todo] To Do\n";
+				} 
+
+				if (this.inTodo) {					
+					let textWithoutMarkers = text.replace(/^\+\+|\+\+$/g, '').trim();
+					this.todoContent += `> ${textWithoutMarkers}\n`;
+					if(!isTodoEnd) {
+						this.todoContent += `> \n`;
+						this.todoParagraphsToRemove.push(paragraph);
+					}
+				}
+
+				if (isTodoEnd) {
+					this.inTodo = false;
+					this.todoParagraphsToRemove.forEach(element => {
+						element.remove();
+					});
+					const container = paragraph.createDiv();
+					MarkdownRenderer.renderMarkdown(this.todoContent, container, null, null);
+					paragraph.replaceWith(container);
+				}
+			});
+		});
 	}
 
 	setStatusBar() {
@@ -121,7 +180,7 @@ export default class Yesterday extends Plugin {
 		updateStatusBarTodoCount(statusBarTodoCount);
 		this.registerFileOperations(statusBarTodoCount);
 	}
-	
+
 	registerFileOperations(statusBarTodoCount: HTMLElement) {
 		this.app.vault.getMarkdownFiles().forEach(file => {
 			if (file.basename.toLowerCase().includes('todo')) {
@@ -138,13 +197,13 @@ export default class Yesterday extends Plugin {
 				}
 			})
 		);
-		
+
 		this.registerEvent(
 			this.app.vault.on('rename', (file, oldPath) => {
 				if (file instanceof TFile && file.extension === 'md') {
 					const oldNameIncludedTodo = oldPath.toLowerCase().includes('todo');
 					const newNameIncludesTodo = file.basename.toLowerCase().includes('todo');
-		
+
 					if (oldNameIncludedTodo && !newNameIncludesTodo) {
 						// Eine Datei, die "todo" im Dateinamen hatte, wurde umbenannt und enthält nun nicht mehr "todo"
 						todoCount--;
@@ -157,7 +216,7 @@ export default class Yesterday extends Plugin {
 				}
 			})
 		);
-		
+
 		this.registerEvent(
 			this.app.vault.on('delete', file => {
 				if (file instanceof TFile && file.extension === 'md' && file.basename.toLowerCase().includes('todo')) {
@@ -176,7 +235,7 @@ export default class Yesterday extends Plugin {
 	async createEntry(): Promise<void> {
 
 		const now = new Date();
-		
+
 		const year = now.getFullYear();
 		const month = ("0" + (now.getMonth() + 1)).slice(-2);
 		const day = ("0" + now.getDate()).slice(-2);
@@ -188,15 +247,15 @@ export default class Yesterday extends Plugin {
 		const time = [hours, minutes, seconds].join("-");
 
 		const timezoneOffsetNumber = now.getTimezoneOffset();
-		const timezoneOffset = ((timezoneOffsetNumber<0? '+':'-') + pad(Math.abs(timezoneOffsetNumber/60), 2) + ":" + pad(Math.abs(timezoneOffsetNumber%60), 2));
+		const timezoneOffset = ((timezoneOffsetNumber < 0 ? '+' : '-') + pad(Math.abs(timezoneOffsetNumber / 60), 2) + ":" + pad(Math.abs(timezoneOffsetNumber % 60), 2));
 
 		const path = getPath();
-		const fileName = path + "/" + date + " - " + time  + ".md";
-		
+		const fileName = path + "/" + date + " - " + time + ".md";
+
 		new Notice("Creating " + fileName);
 		const frontmatter = await createFrontmatter(date + " " + hours + ":" + minutes + ":" + seconds + " " + timezoneOffset, this);
 		new Notice(frontmatter);
-		
+
 		try {
 			const pathExists = await this.app.vault.adapter.exists(path);
 			if (!pathExists) {
@@ -217,7 +276,7 @@ export default class Yesterday extends Plugin {
 
 	toggleTodo() {
 		const file = this.app.workspace.getActiveFile();
-		
+
 		if (file.extension !== "md") {
 			new Notice("This is not an entry")
 			return;
@@ -231,7 +290,7 @@ export default class Yesterday extends Plugin {
 			this.app.fileManager.renameFile(file, newPath);
 		}
 	}
-	
+
 
 	async loadSettings() {
 		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
@@ -244,12 +303,12 @@ export default class Yesterday extends Plugin {
 
 function updateStatusBarTodoCount(barElement: HTMLElement) {
 	let text: String;
-		if (todoCount === 1) {
-			text = ' open entry';
-		} else {
-			text = ' open entries';
-		} 
-		barElement.setText(todoCount.toString() + text);
+	if (todoCount === 1) {
+		text = ' open entry';
+	} else {
+		text = ' open entries';
+	}
+	barElement.setText(todoCount.toString() + text);
 }
 
 function getPath() {
@@ -281,7 +340,7 @@ function pathFromDate(date: Date) {
 }
 
 async function createFrontmatter(datetime: string, plugin: Yesterday): Promise<string> {
-	    
+
 	return `---
 date: ${datetime}
 ---
@@ -297,12 +356,12 @@ async function runCommand(command: string) {
 	return stdout
 }
 
-function pad(number: number, length: number){
-    var str = "" + number
-    while (str.length < length) {
-        str = '0'+str
-    }
-    return str
+function pad(number: number, length: number) {
+	var str = "" + number
+	while (str.length < length) {
+		str = '0' + str
+	}
+	return str
 }
 
 class YesterdaySettingTab extends PluginSettingTab {
@@ -314,12 +373,12 @@ class YesterdaySettingTab extends PluginSettingTab {
 	}
 
 	display(): void {
-		const {containerEl} = this;
+		const { containerEl } = this;
 
 		containerEl.empty();
 
-		containerEl.createEl('h2', {text: 'Configure Yesterday'});
-		containerEl.createEl('p', {text: 'More settings coming soon.'});
+		containerEl.createEl('h2', { text: 'Configure Yesterday' });
+		containerEl.createEl('p', { text: 'More settings coming soon.' });
 
 		// new Setting(containerEl)
 		// 	.setName('Google API Key')

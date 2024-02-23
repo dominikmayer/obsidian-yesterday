@@ -1,85 +1,79 @@
-
 .image-grid {
-    display: flex;
-    flex-wrap: wrap;
-    /* width: 135%; */
-    /* left: -20%; */
-    margin-left: 0px !important;
-    /* transform: translateX(-50%); */
-    position: relative;
-    /* align-items: center;
-    justify-content: center; */
-  }
-  .image-grid figure {
-      flex-grow: 1;
-      margin: 2px !important;
-      height: 20vw;
-      position: relative;
-      overflow: hidden;
-  }
-  .image-grid img, .image-grid video {
-    height: 15vw;
-    margin: 0 2px 2px 0;
-    max-width: 100%;
-    /* min-width: 100%; */
-    vertical-align: bottom;
-    object-fit: cover;
-  }
-  
-  .image-grid::after {
-    content: '';
-    flex-grow: 1e4;
-  }
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-left: 0px !important;
+}
 
-  /* Color entries */
-  .nav-file-title[data-path$="md"] .nav-file-title-content {
-    color: yellowgreen;
-  }
+.image-grid figure {
+  margin: 2px !important;
+  height: 20vw;
+  position: relative;
+  overflow: hidden;
+  /* Removed flex-grow: 1; to stop figures from trying to fill the available space */
+}
 
-  .nav-file-title[data-path$="todo.md"] .nav-file-title-content {
-    color: red;
-  }
+.image-grid img,
+.image-grid video {
+  height: 20vw;
+  margin: 0 2px 2px 0;
+  max-width: 100%;
+  vertical-align: bottom;
+  object-fit: cover;
+}
 
-  /* Hide media files */
-  .nav-file-title[data-path$='.jpeg'], .nav-file-title[data-path$='.jpg'], .nav-file-title[data-path$='.png'] {
-    display: none;
-  }
+/* Color entries */
+.nav-file-title[data-path$="md"] .nav-file-title-content {
+  color: yellowgreen;
+}
 
-  .nav-file-title.is-active {
-    background-color: #404040;
-  }
+.nav-file-title[data-path$="todo.md"] .nav-file-title-content {
+  color: red;
+}
 
-  /* Hide comments */
-  .yesterday-comment, .yesterday-comment ~ div {
-    display: none;
-  }
+/* Hide media files */
+.nav-file-title[data-path$='.jpeg'],
+.nav-file-title[data-path$='.jpg'],
+.nav-file-title[data-path$='.png'] {
+  display: none;
+}
 
-  .yesterday-todo, .yesterday-todo ~ div {
-    color: orange;
-  }
+.nav-file-title.is-active {
+  background-color: #404040;
+}
 
-  .yesterday-dream-start, .yesterday-dream-start ~ .yesterday-dream-end {
-    color: lightskyblue;
-  }
+/* Hide comments */
+.yesterday-comment,
+.yesterday-comment~div {
+  display: none;
+}
 
-  div {
-    /* Make sure the dialog is not displayed over the text */
-    clear: both;
+.callout[data-callout="yesterday-dream"] {
+  --callout-color: 128, 0, 128;
+  --callout-icon: bed-double;
+}
 
-    /* margin-bottom: 0 !important;
+.callout[data-callout="yesterday-todo"] {
+  --callout-color: 255, 165, 0;
+  --callout-icon: check-check;
+}
+
+div {
+  /* Making sure the dialog is not displayed over the text */
+  clear: both;
+
+  /* margin-bottom: 0 !important;
     padding-bottom: 0 !important; */
 }
 
 ul.yesterday-dialog li {
-  display:inline-block;
+  display: inline-block;
   clear: both;
   padding: 5px 10px;
-  /* border-radius: 15px; */
   border-radius: 5px;
   margin-bottom: 0px;
   margin-top: 4px;
   max-width: calc(100% - 50px);
-  /* font-family: Helvetica, Arial, sans-serif; */
 }
 
 ul.yesterday-dialog li.their-dialog {
@@ -99,34 +93,26 @@ ul.yesterday-dialog li.my-dialog {
   border-bottom-left-radius: 15px;
 }
 
-.my-dialog + .my-dialog, .their-dialog + .their-dialog {
-    margin-top: 2px;
+.my-dialog+.my-dialog,
+.their-dialog+.their-dialog {
+  margin-top: 2px;
 }
 
-.their-dialog + .my-dialog {
+.their-dialog+.my-dialog {
   border-top-right-radius: 15px;
 }
 
-.my-dialog + .their-dialog, .their-dialog.end-speech + .their-dialog {
+.my-dialog+.their-dialog,
+.their-dialog.end-speech+.their-dialog {
   border-top-left-radius: 15px;
 }
 
-/* .their-dialog + .their-dialog {
-  border-top-left-radius: 5px;
-  border-bottom-left-radius: 5px;
-}
-
-.yesterday-dialog li:nth-last-child(1 of .my-dialog) {
-  border-bottom-right-radius: 5px;
-  margin-bottom: 1em;
-} */
-
 .my-dialog.end-speech {
-    border-bottom-right-radius: 15px;
+  border-bottom-right-radius: 15px;
 }
 
 .their-dialog.end-speech {
-    border-bottom-left-radius: 15px;
+  border-bottom-left-radius: 15px;
 }
 
 .yesterday-dialog li:nth-child(1 of .my-dialog) {
