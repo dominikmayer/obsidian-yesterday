@@ -47,26 +47,53 @@ export class ImageModal extends Modal {
    */
   onOpen() {
     const { contentEl } = this;
-    contentEl.createEl('img', {
-      attr: {
-        src: this.imgSrc,
-        style: 'width: 100%; height: 100%; object-fit: contain; object-position: center;'
-      }
+
+    // Create an image element
+    const img = contentEl.createEl('img', {
+        attr: {
+            src: this.imgSrc,
+            // Remove the explicit width and height setting to allow natural size
+            style: 'max-width: 100%; max-height: 100%; object-fit: contain; object-position: center;'
+        }
     });
 
-    Object.assign(this.modalEl.style, {
-      width: '100%',
-      height: '100%',
-      boxShadow: 'none'
-    });
+    // Wait for the image to load to get its natural dimensions
+    img.onload = () => {
+        // Calculate the aspect ratio of the image
+        const aspectRatio = img.naturalWidth / img.naturalHeight;
+        
+        // Determine the maximum size of the modal based on the window size
+        const maxWidth = window.innerWidth * 0.9; // 90% of the viewport width
+        const maxHeight = window.innerHeight * 0.8; // 80% of the viewport height
 
+        // Calculate the optimal size of the modal based on the image aspect ratio
+        let modalWidth, modalHeight;
+        if (aspectRatio > 1) {
+            // Image is wider than it is tall
+            modalWidth = Math.min(maxWidth, img.naturalWidth);
+            modalHeight = modalWidth / aspectRatio;
+        } else {
+            // Image is taller than it is wide or square
+            modalHeight = Math.min(maxHeight, img.naturalHeight);
+            modalWidth = modalHeight * aspectRatio;
+        }
+
+        // Apply the calculated dimensions to the modal
+        Object.assign(this.modalEl.style, {
+            width: `${modalWidth}px`,
+            height: `${modalHeight}px`,
+            boxShadow: 'none'
+        });
+    };
+
+    // Close the modal on click
     this.modalEl.addEventListener('click', () => this.close());
-  }
-
-  /**
-   * Called when the modal is closed. Cleans up by emptying the content element.
-   */
-  onClose() {
-    this.contentEl.empty();
-  }
 }
+
+    /**
+     * Called when the modal is closed. Cleans up by emptying the content element.
+     */
+    onClose() {
+      this.contentEl.empty();
+    }
+  }

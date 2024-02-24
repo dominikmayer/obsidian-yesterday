@@ -128,12 +128,12 @@ export default class Yesterday extends Plugin {
 				if (isDreamStart && !this.inDream) {
 					this.inDream = true;
 					this.dreamContent = "> [!yesterday-dream] Dream\n";
-				} 
+				}
 
-				if (this.inDream) {					
+				if (this.inDream) {
 					let textWithoutMarkers = text.replace(/^§§§|§§§$/g, '').trim();
 					this.dreamContent += `> ${textWithoutMarkers}\n`;
-					if(!isDreamEnd) {
+					if (!isDreamEnd) {
 						this.dreamContent += `> \n`;
 						this.dreamParagraphsToRemove.push(paragraph);
 					}
@@ -286,7 +286,7 @@ export default class Yesterday extends Plugin {
 			document.body.classList.remove('hide-media-files');
 		}
 	}
-	
+
 	setColorClasses() {
 		if (this.settings.colorMarkdownFiles) {
 			document.body.classList.add('color-markdown-files');
@@ -298,7 +298,7 @@ export default class Yesterday extends Plugin {
 	async saveSettings() {
 		await this.saveData(this.settings);
 	}
-	
+
 }
 
 function updateStatusBarTodoCount(barElement: HTMLElement) {
@@ -382,15 +382,15 @@ class YesterdaySettingTab extends PluginSettingTab {
 		p.createEl('a', { href: 'https://www.yesterday.md', text: 'yesterday.md' });
 
 		new Setting(containerEl)
-		.setName('Color Entries')
-		.setDesc('Highlights open and resolved entries in different colors')
-		.addToggle(toggle => toggle
-			.setValue(this.plugin.settings.colorMarkdownFiles)
-			.onChange(async (value) => {
-				this.plugin.settings.colorMarkdownFiles = value;
-				await this.plugin.saveSettings();
-				this.plugin.setColorClasses();
-			}));
+			.setName('Color Entries')
+			.setDesc('Highlights open and resolved entries in different colors')
+			.addToggle(toggle => toggle
+				.setValue(this.plugin.settings.colorMarkdownFiles)
+				.onChange(async (value) => {
+					this.plugin.settings.colorMarkdownFiles = value;
+					await this.plugin.saveSettings();
+					this.plugin.setColorClasses();
+				}));
 
 		new Setting(containerEl)
 			.setName('Hide Media Files')
@@ -402,17 +402,5 @@ class YesterdaySettingTab extends PluginSettingTab {
 					await this.plugin.saveSettings();
 					this.plugin.setMediaClasses();
 				}));
-
-		// new Setting(containerEl)
-		// 	.setName('DarkSky API Key')
-		// 	.setDesc('You can get it from DarkSky')
-		// 	.addText(text => text
-		// 		.setPlaceholder('Enter your API key')
-		// 		.setValue(this.plugin.settings.darkSkyApiKey)
-		// 		.onChange(async (value) => {
-		// 			console.log('Secret: ' + value);
-		// 			this.plugin.settings.darkSkyApiKey = value;
-		// 			await this.plugin.saveSettings();
-		// 		}));
 	}
 }
