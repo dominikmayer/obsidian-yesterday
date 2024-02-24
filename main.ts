@@ -5,10 +5,14 @@ import { YesterdayDialog } from "./dialogs"
 const mediaExtensions = ['jpg', 'jpeg', 'png'];
 
 interface YesterdaySettings {
+	colorMarkdownFiles: boolean;
+	hideMediaFiles: boolean;
 	// Define settings here if needed in the future
 }
 
 const DEFAULT_SETTINGS: YesterdaySettings = {
+	colorMarkdownFiles: true,
+	hideMediaFiles: false
 	// Define default settings here if needed in the future
 }
 
@@ -19,6 +23,7 @@ export default class Yesterday extends Plugin {
 
 	async onload() {
 		await this.loadSettings();
+
 		this.addRibbonIcons();
 		this.addCommands();
 		this.handleImageClicks();
@@ -270,11 +275,30 @@ export default class Yesterday extends Plugin {
 
 	async loadSettings() {
 		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+		this.setMediaClasses();
+		this.setColorClasses();
+	}
+
+	setMediaClasses() {
+		if (this.settings.hideMediaFiles) {
+			document.body.classList.add('hide-media-files');
+		} else {
+			document.body.classList.remove('hide-media-files');
+		}
+	}
+	
+	setColorClasses() {
+		if (this.settings.colorMarkdownFiles) {
+			document.body.classList.add('color-markdown-files');
+		} else {
+			document.body.classList.remove('color-markdown-files');
+		}
 	}
 
 	async saveSettings() {
 		await this.saveData(this.settings);
 	}
+	
 }
 
 function updateStatusBarTodoCount(barElement: HTMLElement) {
@@ -354,19 +378,30 @@ class YesterdaySettingTab extends PluginSettingTab {
 		containerEl.empty();
 
 		containerEl.createEl('h2', { text: 'Configure Yesterday' });
-		containerEl.createEl('p', { text: 'More settings coming soon.' });
+		let p = containerEl.createEl('p', { text: 'More information on ' });
+		p.createEl('a', { href: 'https://www.yesterday.md', text: 'yesterday.md' });
 
-		// new Setting(containerEl)
-		// 	.setName('Google API Key')
-		// 	.setDesc('You can get it from Google')
-		// 	.addText(text => text
-		// 		.setPlaceholder('Enter your API key')
-		// 		.setValue(this.plugin.settings.googleAPIKey)
-		// 		.onChange(async (value) => {
-		// 			console.log('Secret: ' + value);
-		// 			this.plugin.settings.googleAPIKey = value;
-		// 			await this.plugin.saveSettings();
-		// 		}));
+		new Setting(containerEl)
+		.setName('Color Entries')
+		.setDesc('Highlights open and resolved entries in different colors')
+		.addToggle(toggle => toggle
+			.setValue(this.plugin.settings.colorMarkdownFiles)
+			.onChange(async (value) => {
+				this.plugin.settings.colorMarkdownFiles = value;
+				await this.plugin.saveSettings();
+				this.plugin.setColorClasses();
+			}));
+
+		new Setting(containerEl)
+			.setName('Hide Media Files')
+			.setDesc('Only show markdown files in the file explorer')
+			.addToggle(toggle => toggle
+				.setValue(this.plugin.settings.hideMediaFiles)
+				.onChange(async (value) => {
+					this.plugin.settings.hideMediaFiles = value;
+					await this.plugin.saveSettings();
+					this.plugin.setMediaClasses();
+				}));
 
 		// new Setting(containerEl)
 		// 	.setName('DarkSky API Key')

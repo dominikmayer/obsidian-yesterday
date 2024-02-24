@@ -23,18 +23,18 @@
 }
 
 /* Color entries */
-.nav-file-title[data-path$="md"] .nav-file-title-content {
+.color-markdown-files .nav-file-title[data-path$="md"] .nav-file-title-content {
   color: yellowgreen;
 }
 
-.nav-file-title[data-path$="todo.md"] .nav-file-title-content {
+.color-markdown-files .nav-file-title[data-path$="todo.md"] .nav-file-title-content {
   color: red;
 }
 
 /* Hide media files */
-.nav-file-title[data-path$='.jpeg'],
-.nav-file-title[data-path$='.jpg'],
-.nav-file-title[data-path$='.png'] {
+.hide-media-files .nav-file-title[data-path$='.jpeg'],
+.hide-media-files .nav-file-title[data-path$='.jpg'],
+.hide-media-files .nav-file-title[data-path$='.png'] {
   display: none;
 }
 
