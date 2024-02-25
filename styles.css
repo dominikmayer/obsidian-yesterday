@@ -83,7 +83,7 @@ ul.yesterday-dialog li {
   max-width: calc(100% - 50px);
 }
 
-ul.yesterday-dialog li .dialog-speaker {
+ul.yesterday-dialog li .dialog-speaker, ul.yesterday-dialog li .dialog-comment {
   padding: 0px 0px;
   margin: 0px;
   font-size: 0.8em;
@@ -96,55 +96,32 @@ ul.yesterday-dialog li .dialog-comment {
   margin-bottom: 0px;
 }
 
-ul.yesterday-dialog li.my-dialog .dialog-comment {
-  border-right-style: solid !important;
-  border-right-width: 3px !important;
-  border-right: #ffffff76;
-}
-
-ul.yesterday-dialog li.their-dialog .dialog-comment {
-  border-left-style: solid !important;
-  border-left-width: 3px !important;
-  border-left: #02131066;
-}
-
 ul.yesterday-dialog li .dialog-statement {
   margin-top: 0px;
   margin-bottom: 0px;
 }
 
-ul.yesterday-dialog li.their-dialog .dialog-speaker {
+ul.yesterday-dialog li.their-dialog .dialog-speaker,
+ul.yesterday-dialog li.their-dialog .dialog-comment {
   padding-left: 10px;
 }
 
-ul.yesterday-dialog li.my-dialog .dialog-speaker {
+ul.yesterday-dialog li.my-dialog .dialog-speaker,
+ul.yesterday-dialog li.my-dialog .dialog-comment {
   padding-right: 10px;
 }
 
-ul.yesterday-dialog li .dialog-comment-statement {
+ul.yesterday-dialog li .dialog-statement {
   padding: 5px 10px;
   border-radius: 5px;
   margin-top: 0px;
 }
 
-ul.yesterday-dialog li.their-dialog.emoji-only .dialog-comment-statement, ul.yesterday-dialog li.my-dialog.emoji-only .dialog-comment-statement {
+ul.yesterday-dialog li.their-dialog.emoji-only .dialog-statement, ul.yesterday-dialog li.my-dialog.emoji-only .dialog-statement {
   background-color: transparent;
   padding-left: 0px;
   padding-right: 0px;
 }
-
-ul.yesterday-dialog li.their-dialog.emoji-only .dialog-comment, ul.yesterday-dialog li.my-dialog.emoji-only .dialog-comment {
-  border-left-style: none  !important;
-  border-right-style: none !important;
-}
-
-/* ul.yesterday-dialog li.their-dialog.emoji-only .dialog-comment::before, ul.yesterday-dialog li.my-dialog.emoji-only .dialog-comment::before {
-  content: "(";
-}
-
-ul.yesterday-dialog li.their-dialog.emoji-only .dialog-comment::after, ul.yesterday-dialog li.my-dialog.emoji-only .dialog-comment::after {
-  content: ")";
-} */
 
 ul.yesterday-dialog li.their-dialog.emoji-only .dialog-statement, ul.yesterday-dialog li.my-dialog.emoji-only .dialog-statement {
   font-size: 2em;
@@ -154,7 +131,7 @@ ul.yesterday-dialog li.their-dialog {
   float: left;
 }
 
-ul.yesterday-dialog li.their-dialog .dialog-comment-statement {
+ul.yesterday-dialog li.their-dialog .dialog-statement {
   background: #eee;
   color: #021310;
   border-top-right-radius: 15px;
@@ -166,59 +143,61 @@ ul.yesterday-dialog li.my-dialog {
   text-align: right;
 }
 
-ul.yesterday-dialog li.my-dialog .dialog-comment-statement {
+ul.yesterday-dialog li.my-dialog .dialog-statement {
   background: #0084ff;
   color: #fff;
   border-top-left-radius: 15px;
   border-bottom-left-radius: 15px;
 }
 
-.my-dialog+.their-dialog .dialog-comment-statement,
-.their-dialog+.my-dialog .dialog-comment-statement {
+.my-dialog+.their-dialog .dialog-statement,
+.their-dialog+.my-dialog .dialog-statement {
   margin-top: 5px;
 }
 
-.my-dialog+.their-dialog .dialog-speaker+.dialog-comment-statement,
-.their-dialog+.my-dialog .dialog-speaker+.dialog-comment-statement {
+.my-dialog+.their-dialog .dialog-speaker+.dialog-comment-statement .dialog-statement,
+.my-dialog+.their-dialog .dialog-comment+.dialog-statement,
+.their-dialog+.my-dialog .dialog-speaker+.dialog-comment-statement .dialog-statement,
+.their-dialog+.my-dialog .dialog-comment+.dialog-statement {
   margin-top: 0px;
 }
 
-.their-dialog+.my-dialog .dialog-comment-statement {
+.their-dialog+.my-dialog .dialog-statement {
   border-top-right-radius: 15px;
 }
 
-.my-dialog+.their-dialog .dialog-comment-statement,
-.their-dialog.end-speech+.their-dialog .dialog-comment-statement {
+.my-dialog+.their-dialog .dialog-statement,
+.their-dialog.end-speech+.their-dialog .dialog-statement {
   border-top-left-radius: 15px;
 }
 
-.my-dialog.end-speech .dialog-comment-statement {
+.my-dialog.end-speech .dialog-statement {
   border-bottom-right-radius: 15px;
 }
 
-.their-dialog.end-speech .dialog-comment-statement {
+.their-dialog.end-speech .dialog-statement {
   border-bottom-left-radius: 15px;
 }
 
-.yesterday-dialog li:nth-child(1 of .my-dialog) .dialog-comment-statement {
+.yesterday-dialog li:nth-child(1 of .my-dialog) .dialog-statement {
   border-top-right-radius: 15px;
 }
 
-.yesterday-dialog li:nth-child(1 of .their-dialog) .dialog-comment-statement {
+.yesterday-dialog li:nth-child(1 of .their-dialog) .dialog-statement {
   border-top-left-radius: 15px;
 }
 
-.yesterday-dialog li:nth-last-child(1 of .their-dialog) .dialog-comment-statement {
+.yesterday-dialog li:nth-last-child(1 of .their-dialog) .dialog-statement {
   border-bottom-left-radius: 15px;
   margin-bottom: 1em;
 }
 
-.yesterday-dialog li:nth-last-child(1 of .my-dialog) .dialog-comment-statement {
+.yesterday-dialog li:nth-last-child(1 of .my-dialog) .dialog-statement {
   border-bottom-right-radius: 15px;
   margin-bottom: 1em;
 }
 
-.yesterday-dialog li:nth-last-child(1 of .their-dialog) .dialog-comment-statement {
+.yesterday-dialog li:nth-last-child(1 of .their-dialog) .dialog-statement {
   border-bottom-left-radius: 15px;
   margin-bottom: 1em;
 }
