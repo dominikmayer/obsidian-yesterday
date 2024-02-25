@@ -47,11 +47,9 @@ While walking home, Karen shared a joke that unexpectedly lightened the mood:
 .Patient: 😳
 ```
 
-![Example rendering](https://ik.imagekit.io/mitado/obsidian-yesterday-example_yuoXeej6j.png)
+![Example rendering](https://ik.imagekit.io/mitado/obsidian-yesterday-example_yuoXeej6j.png?updatedAt=1708879259580)
 
-Clicking on any image shows a larger version:
-
-![Image modal](https://ik.imagekit.io/mitado/obsdian-yesterday-modal_eD-vWftwz.png)
+Clicking on any image shows a larger version.
 
 ### Journal vault
 
