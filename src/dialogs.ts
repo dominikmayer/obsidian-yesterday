@@ -61,13 +61,15 @@ export class YesterdayDialog extends MarkdownRenderChild {
     if (!speaker) return null; // Skip lines without a speaker
 
     const dialogType = this.speakersMap.get(speaker.toLowerCase()) || "their-dialog";
-    const showSpeaker = !this.spokenYet.has(speaker.toLowerCase()) || comment !== "";
+    const showSpeaker = !this.spokenYet.has(speaker.toLowerCase());
 
     const line = document.createElement("li");
-    const speakerElement = createEl("span");
-    const commentElement = createEl("i");
-    const speakerCommentElement = createEl("p");
-    speakerCommentElement.addClass("dialog-speaker-comment");
+    const speakerElement = createEl("p");
+    speakerElement.addClass("dialog-speaker");
+
+    const commentStatementElement = createEl("div");
+    commentStatementElement.addClass("dialog-comment-statement");
+
     const statementElement = createEl("p");
     statementElement.addClass("dialog-statement");
 
@@ -76,19 +78,22 @@ export class YesterdayDialog extends MarkdownRenderChild {
     // Construct the line content. Implementation depends on your format
     if (showSpeaker) {
       speakerElement.textContent = `${speaker}`;
-      speakerCommentElement.appendChild(speakerElement);
-      if (comment !== "") {
-        commentElement.textContent = ` (${comment})`;
-        speakerCommentElement.appendChild(commentElement);
-      }
-      line.appendChild(speakerCommentElement);
-    } else {
-      if (this.isOnlyEmoji(statement)) {
-        line.classList.add("emoji-only");
-      }
+      line.appendChild(speakerElement);
     }
+    if (comment !== "") {
+      const commentElement = createEl("p");
+      commentElement.addClass("dialog-comment");
+      commentElement.textContent = `${comment}`;
+      commentStatementElement.appendChild(commentElement);
+    }
+    // line.appendChild(speakerCommentElement);
+    if (this.isOnlyEmoji(statement)) {
+      line.classList.add("emoji-only");
+    }
+
     statementElement.textContent = `${statement}`;
-    line.appendChild(statementElement);
+    commentStatementElement.appendChild(statementElement);
+    line.appendChild(commentStatementElement);
     this.spokenYet.add(speaker.toLowerCase());
 
     if (this.lastSpeaker && this.lastSpeaker !== speaker) {
