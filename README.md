@@ -23,19 +23,35 @@ weather:
     sky: partly-cloudy-day
 ---
 
-Saw a **flying duck** today. Tried to follow. Didn't work. Karen caught it on video:
+§§§
+I found myself in an ancient library, its shelves stretching into infinity under a dim, mysterious light. Among the endless rows, a book with a cover that shimmered like stardust caught my eye. Just as my fingers grazed its spine, it fluttered away, leading me through a labyrinth of shelves. This chase brought me to a serene clearing where the duck from earlier awaited, its feathers aglow with an ethereal light. It spoke with a voice that resonated with both familiarity and otherworldliness, imparting wisdom that felt profound yet slipped away upon waking.
+§§§
 
-/2010-02-02 - 16-35.jpg
+Today's adventure took us to the heart of the city, yet away from its clamor: Central Park. A green oasis amidst the concrete jungle, each path and bench tells a story. Our first stop was the Bethesda Terrace, its intricate stonework and arches a testament to craftsmanship and vision.
 
-On the way home she found this lame joke:
+/2010-02-02 - 15-12-13.jpg
+/2010-02-02 - 15-12-45.jpg
+
+Not far from there, the Bow Bridge presented a picturesque scene, its graceful curve reflecting on the calm lake waters, a perfect moment captured in the soft afternoon light.
+
+/2010-02-02 - 16-01-31.jpg
+
+While walking home, Karen shared a joke that unexpectedly lightened the mood:
 
 .Doctor: I'm sorry but you suffer from a terminal illness and have only 10 to live.
-.Patient (concerned): What do you mean, 10? 10 what? Months? Weeks?!
+.Patient (anxiously): What do you mean, 10?
+.Patient: 10 what?
+.Patient: Months?
+.Patient: Weeks?!
 .Doctor: Nine.
 .Patient: 😳
 ```
 
 ![Example rendering](https://ik.imagekit.io/mitado/obsidian-yesterday-example_yuoXeej6j.png)
+
+Clicking on any image shows a larger version:
+
+![Image modal](https://ik.imagekit.io/mitado/obsdian-yesterday-modal_eD-vWftwz.png)
 
 ### Journal vault
 

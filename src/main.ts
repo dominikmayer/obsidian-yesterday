@@ -88,17 +88,7 @@ export default class Yesterday extends Plugin {
 		this.registerMarkdownPostProcessor((element, context) => {
 			const paragraphs = Array.from(element.querySelectorAll("p"));
 
-			// Function to render and replace dream content
-			// const renderDream = (paragraph: HTMLParagraphElement) => {
-			// 	// Prepend and append formatting for blockquote
-			// 	const formattedDream = `> [!info]\n>\n${dreamContent.split("\n").map(line => `> ${line}`).join("\n")}\n>`;
-			// 	// Render the transformed dream markdown
-			// 	MarkdownRenderer.renderMarkdown(formattedDream, paragraph, context.sourcePath, null);
-			// 	// Clear dream content after rendering
-			// 	dreamContent = "";
-			// };
-
-			paragraphs.forEach((paragraph, index) => {
+			paragraphs.forEach((paragraph) => {
 				const text = paragraph.innerText.trim();
 
 				const isImage = text[0] === "/" && mediaExtensions.some(extension => text.endsWith(extension));
@@ -141,7 +131,7 @@ export default class Yesterday extends Plugin {
 						element.remove();
 					});
 					const container = paragraph.createDiv();
-					MarkdownRenderer.renderMarkdown(this.dreamContent, container, null, null);
+					MarkdownRenderer.renderMarkdown(this.dreamContent, container, null, this);
 					paragraph.replaceWith(container);
 				}
 
