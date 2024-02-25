@@ -64,30 +64,30 @@ export class YesterdayDialog extends MarkdownRenderChild {
     const showSpeaker = !this.spokenYet.has(speaker.toLowerCase()) || comment !== "";
 
     const line = document.createElement("li");
-    const speakerElement = createEl("b");
+    const speakerElement = createEl("span");
     const commentElement = createEl("i");
-    const statementElement = createEl("span");
+    const speakerCommentElement = createEl("p");
+    speakerCommentElement.addClass("dialog-speaker-comment");
+    const statementElement = createEl("p");
+    statementElement.addClass("dialog-statement");
 
     line.classList.add(dialogType);
 
     // Construct the line content. Implementation depends on your format
     if (showSpeaker) {
-      if (comment === "") {
-        speakerElement.textContent = `${speaker}:`;
-        line.appendChild(speakerElement);
-      } else {
-        speakerElement.textContent = `${speaker}`;
-        commentElement.textContent = ` (${comment}):`;
-        line.appendChild(speakerElement);
-        line.appendChild(commentElement);
+      speakerElement.textContent = `${speaker}`;
+      speakerCommentElement.appendChild(speakerElement);
+      if (comment !== "") {
+        commentElement.textContent = ` (${comment})`;
+        speakerCommentElement.appendChild(commentElement);
       }
-      line.appendChild(createEl("br"));
+      line.appendChild(speakerCommentElement);
     } else {
       if (this.isOnlyEmoji(statement)) {
         line.classList.add("emoji-only");
       }
     }
-    statementElement.textContent = ` ${statement}`;
+    statementElement.textContent = `${statement}`;
     line.appendChild(statementElement);
     this.spokenYet.add(speaker.toLowerCase());
 

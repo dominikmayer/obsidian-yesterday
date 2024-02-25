@@ -76,14 +76,34 @@ ul.yesterday-dialog {
 ul.yesterday-dialog li {
   display: inline-block;
   clear: both;
-  padding: 5px 10px;
-  border-radius: 5px;
   margin-bottom: 0px;
-  margin-top: 4px;
+  margin-top: 0px;
+  padding-bottom: 0px;
+  padding-top: 0px;
   max-width: calc(100% - 50px);
 }
 
-ul.yesterday-dialog li.their-dialog.emoji-only, ul.yesterday-dialog li.my-dialog.emoji-only {
+ul.yesterday-dialog li .dialog-speaker-comment {
+  padding: 0px 0px;
+  margin: 0px;
+  font-size: 0.8em;
+}
+
+ul.yesterday-dialog li.their-dialog .dialog-speaker-comment {
+  padding-left: 10px;
+}
+
+ul.yesterday-dialog li.my-dialog .dialog-speaker-comment {
+  padding-right: 10px;
+}
+
+ul.yesterday-dialog li .dialog-statement {
+  padding: 5px 10px;
+  border-radius: 5px;
+  margin-top: 0px;
+}
+
+ul.yesterday-dialog li.their-dialog.emoji-only .dialog-statement, ul.yesterday-dialog li.my-dialog.emoji-only .dialog-statement {
   background-color: transparent;
   font-size: 2em;
   padding-left: 0px;
@@ -91,9 +111,12 @@ ul.yesterday-dialog li.their-dialog.emoji-only, ul.yesterday-dialog li.my-dialog
 }
 
 ul.yesterday-dialog li.their-dialog {
+  float: left;
+}
+
+ul.yesterday-dialog li.their-dialog .dialog-statement {
   background: #eee;
   color: #021310;
-  float: left;
   border-top-right-radius: 15px;
   border-bottom-right-radius: 15px;
 }
@@ -101,53 +124,56 @@ ul.yesterday-dialog li.their-dialog {
 ul.yesterday-dialog li.my-dialog {
   float: right;
   text-align: right;
+}
+
+ul.yesterday-dialog li.my-dialog .dialog-statement {
   background: #0084ff;
   color: #fff;
   border-top-left-radius: 15px;
   border-bottom-left-radius: 15px;
 }
 
-.my-dialog+.my-dialog,
+.my-dialog+.my-dialog .dialog-statement,
 .their-dialog+.their-dialog {
   margin-top: 2px;
 }
 
-.their-dialog+.my-dialog {
+.their-dialog+.my-dialog .dialog-statement {
   border-top-right-radius: 15px;
 }
 
-.my-dialog+.their-dialog,
-.their-dialog.end-speech+.their-dialog {
+.my-dialog+.their-dialog .dialog-statement,
+.their-dialog.end-speech+.their-dialog .dialog-statement {
   border-top-left-radius: 15px;
 }
 
-.my-dialog.end-speech {
+.my-dialog.end-speech .dialog-statement {
   border-bottom-right-radius: 15px;
 }
 
-.their-dialog.end-speech {
+.their-dialog.end-speech .dialog-statement {
   border-bottom-left-radius: 15px;
 }
 
-.yesterday-dialog li:nth-child(1 of .my-dialog) {
+.yesterday-dialog li:nth-child(1 of .my-dialog) .dialog-statement {
   border-top-right-radius: 15px;
 }
 
-.yesterday-dialog li:nth-child(1 of .their-dialog) {
+.yesterday-dialog li:nth-child(1 of .their-dialog) .dialog-statement {
   border-top-left-radius: 15px;
 }
 
-.yesterday-dialog li:nth-last-child(1 of .their-dialog) {
+.yesterday-dialog li:nth-last-child(1 of .their-dialog) .dialog-statement {
   border-bottom-left-radius: 15px;
   margin-bottom: 1em;
 }
 
-.yesterday-dialog li:nth-last-child(1 of .my-dialog) {
+.yesterday-dialog li:nth-last-child(1 of .my-dialog) .dialog-statement {
   border-bottom-right-radius: 15px;
   margin-bottom: 1em;
 }
 
-.yesterday-dialog li:nth-last-child(1 of .their-dialog) {
+.yesterday-dialog li:nth-last-child(1 of .their-dialog) .dialog-statement {
   border-bottom-left-radius: 15px;
   margin-bottom: 1em;
 }
