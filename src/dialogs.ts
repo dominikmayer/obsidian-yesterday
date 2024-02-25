@@ -67,9 +67,6 @@ export class YesterdayDialog extends MarkdownRenderChild {
     const speakerElement = createEl("p");
     speakerElement.addClass("dialog-speaker");
 
-    const commentStatementElement = createEl("div");
-    commentStatementElement.addClass("dialog-comment-statement");
-
     const statementElement = createEl("p");
     statementElement.addClass("dialog-statement");
 
@@ -84,16 +81,14 @@ export class YesterdayDialog extends MarkdownRenderChild {
       const commentElement = createEl("p");
       commentElement.addClass("dialog-comment");
       commentElement.textContent = `${comment}`;
-      commentStatementElement.appendChild(commentElement);
+      line.appendChild(commentElement);
     }
-    // line.appendChild(speakerCommentElement);
     if (this.isOnlyEmoji(statement)) {
       line.classList.add("emoji-only");
     }
 
     statementElement.textContent = `${statement}`;
-    commentStatementElement.appendChild(statementElement);
-    line.appendChild(commentStatementElement);
+    line.appendChild(statementElement);
     this.spokenYet.add(speaker.toLowerCase());
 
     if (this.lastSpeaker && this.lastSpeaker !== speaker) {

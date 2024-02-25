@@ -83,7 +83,9 @@ ul.yesterday-dialog li {
   max-width: calc(100% - 50px);
 }
 
-ul.yesterday-dialog li .dialog-speaker, ul.yesterday-dialog li .dialog-comment {
+ul.yesterday-dialog li .dialog-speaker,
+ul.yesterday-dialog li .dialog-comment {
+  display: inline;
   padding: 0px 0px;
   margin: 0px;
   font-size: 0.8em;
@@ -96,9 +98,25 @@ ul.yesterday-dialog li .dialog-comment {
   margin-bottom: 0px;
 }
 
+ul.yesterday-dialog li .dialog-speaker+.dialog-comment {
+  margin-left: -5px;
+  padding-left: 0px;
+  font-style: italic;
+}
+
+li .dialog-speaker+.dialog-comment::before {
+  content: "(";
+}
+
+li .dialog-speaker+.dialog-comment::after {
+  content: ")";
+}
+
 ul.yesterday-dialog li .dialog-statement {
   margin-top: 0px;
   margin-bottom: 0px;
+  padding: 5px 10px;
+  border-radius: 5px;
 }
 
 ul.yesterday-dialog li.their-dialog .dialog-speaker,
@@ -109,12 +127,6 @@ ul.yesterday-dialog li.their-dialog .dialog-comment {
 ul.yesterday-dialog li.my-dialog .dialog-speaker,
 ul.yesterday-dialog li.my-dialog .dialog-comment {
   padding-right: 10px;
-}
-
-ul.yesterday-dialog li .dialog-statement {
-  padding: 5px 10px;
-  border-radius: 5px;
-  margin-top: 0px;
 }
 
 ul.yesterday-dialog li.their-dialog.emoji-only .dialog-statement, ul.yesterday-dialog li.my-dialog.emoji-only .dialog-statement {
@@ -155,9 +167,9 @@ ul.yesterday-dialog li.my-dialog .dialog-statement {
   margin-top: 5px;
 }
 
-.my-dialog+.their-dialog .dialog-speaker+.dialog-comment-statement .dialog-statement,
+.my-dialog+.their-dialog .dialog-speaker+.dialog-statement,
 .my-dialog+.their-dialog .dialog-comment+.dialog-statement,
-.their-dialog+.my-dialog .dialog-speaker+.dialog-comment-statement .dialog-statement,
+.their-dialog+.my-dialog .dialog-speaker+.dialog-statement,
 .their-dialog+.my-dialog .dialog-comment+.dialog-statement {
   margin-top: 0px;
 }
