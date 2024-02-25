@@ -58,7 +58,6 @@ export class YesterdayDialog extends MarkdownRenderChild {
 
   createDialogLine(text: string) {
     const { speaker, comment, statement } = this.dissectDialogLine(text);
-    console.log(speaker, comment, statement);
     if (!speaker) return null; // Skip lines without a speaker
 
     const dialogType = this.speakersMap.get(speaker.toLowerCase()) || "their-dialog";
@@ -72,7 +71,6 @@ export class YesterdayDialog extends MarkdownRenderChild {
     line.classList.add(dialogType);
 
     // Construct the line content. Implementation depends on your format
-    // line.textContent = `${speaker}: ${statement}`; // Simplified for demonstration
     if (showSpeaker) {
       if (comment === "") {
         speakerElement.textContent = `${speaker}:`;

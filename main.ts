@@ -7,13 +7,13 @@ const mediaExtensions = ['jpg', 'jpeg', 'png'];
 interface YesterdaySettings {
 	colorMarkdownFiles: boolean;
 	hideMediaFiles: boolean;
-	// Define settings here if needed in the future
+	showTodoCount: boolean;
 }
 
 const DEFAULT_SETTINGS: YesterdaySettings = {
 	colorMarkdownFiles: true,
-	hideMediaFiles: false
-	// Define default settings here if needed in the future
+	hideMediaFiles: false,
+	showTodoCount: false
 }
 
 let todoCount = 0;
@@ -39,12 +39,10 @@ export default class Yesterday extends Plugin {
 	// Creates icons in the left ribbon
 	addRibbonIcons() {
 		const newEntryRibbon = this.addRibbonIcon('create-new', 'Create Entry', (evt: MouseEvent) => {
-			// Called when the user clicks the icon.
 			this.createEntry();
 		});
 
 		const toggleTodoRibbon = this.addRibbonIcon('checkmark', 'Toggle To Do', (evt: MouseEvent) => {
-			// Called when the user clicks the icon.
 			this.toggleTodo();
 		});
 	}
@@ -53,7 +51,6 @@ export default class Yesterday extends Plugin {
 		this.addCommand({
 			id: 'create-entry',
 			name: 'Create entry',
-			// hotkeys: [{ modifiers: ["Mod"], key: "n" }],
 			callback: () => {
 				this.createEntry();
 			}
@@ -62,7 +59,6 @@ export default class Yesterday extends Plugin {
 		this.addCommand({
 			id: 'toggle-to-do',
 			name: 'Toggle entry to do',
-			// hotkeys: [{ modifiers: ["Mod"], key: "t" }],
 			callback: () => {
 				this.toggleTodo();
 			}
@@ -156,25 +152,68 @@ export default class Yesterday extends Plugin {
 		});
 	}
 
-	setStatusBar() {
-		const statusBarTodoCount = this.addStatusBarItem();
-		updateStatusBarTodoCount(statusBarTodoCount);
-		this.registerFileOperations(statusBarTodoCount);
-	}
-
-	registerFileOperations(statusBarTodoCount: HTMLElement) {
-		this.app.vault.getMarkdownFiles().forEach(file => {
+	updateTodoCount() {
+		// Reset todoCount
+		todoCount = 0;
+	
+		// Calculate todoCount based on current vault state
+		const files = this.app.vault.getMarkdownFiles();
+		files.forEach(file => {
 			if (file.basename.toLowerCase().includes('todo')) {
 				todoCount++;
 			}
 		});
+	
+		// Update the status bar item if it exists
+		if (this.statusBarTodoCount) {
+			this.updateStatusBarTodoCount();
+		}
+	}
+
+	updateStatusBarTodoCount() {
+		if (!this.statusBarTodoCount) return;
+	
+		let text: String;
+		if (todoCount === 1) {
+			text = ' open entry';
+		} else {
+			text = ' open entries';
+		}
+		this.statusBarTodoCount.setText(todoCount.toString() + text);
+	}
+
+	statusBarTodoCount: HTMLElement;
+
+	setStatusBar() {
+		if (this.settings.showTodoCount) {
+			if (!this.statusBarTodoCount) {
+				this.statusBarTodoCount = this.addStatusBarItem();
+				// Make sure todoCount is up to date before displaying it
+				this.updateTodoCount();
+				// Assuming registerFileOperations is adapted to avoid adding listeners multiple times
+				this.registerFileOperations();
+			}
+		} else {
+			if (this.statusBarTodoCount) {
+				this.statusBarTodoCount.remove();
+				this.statusBarTodoCount = null; // Ensure it's set to null after removing
+			}
+			// No need to recalculate todoCount here since the status bar item is being hidden
+		}
+	}
+
+	todoEventListenersAdded: boolean = false;
+
+	registerFileOperations() {
+
+		if (this.todoEventListenersAdded) return
 
 		this.registerEvent(
 			this.app.vault.on('create', file => {
 				if (file instanceof TFile && file.extension === 'md' && file.basename.toLowerCase().includes('todo')) {
-					// Eine neue Markdown-Datei mit "todo" im Dateinamen wurde erstellt
+					// A new Markdown file with "todo" in the file name was created
 					todoCount++;
-					updateStatusBarTodoCount(statusBarTodoCount);
+					this.updateStatusBarTodoCount();
 				}
 			})
 		);
@@ -186,13 +225,13 @@ export default class Yesterday extends Plugin {
 					const newNameIncludesTodo = file.basename.toLowerCase().includes('todo');
 
 					if (oldNameIncludedTodo && !newNameIncludesTodo) {
-						// Eine Datei, die "todo" im Dateinamen hatte, wurde umbenannt und enthält nun nicht mehr "todo"
+						// A Markdown file with "todo" in the file name was renamed and doesn't include "todo" anymore
 						todoCount--;
-						updateStatusBarTodoCount(statusBarTodoCount);
+						this.updateStatusBarTodoCount();
 					} else if (!oldNameIncludedTodo && newNameIncludesTodo) {
-						// Eine Datei, die nicht "todo" im Dateinamen hatte, wurde umbenannt und enthält nun "todo"
+						// A Markdown file without "todo" in the file name was renamed and does now include "todo"
 						todoCount++;
-						updateStatusBarTodoCount(statusBarTodoCount);
+						this.updateStatusBarTodoCount();
 					}
 				}
 			})
@@ -201,12 +240,14 @@ export default class Yesterday extends Plugin {
 		this.registerEvent(
 			this.app.vault.on('delete', file => {
 				if (file instanceof TFile && file.extension === 'md' && file.basename.toLowerCase().includes('todo')) {
-					// Eine Markdown-Datei mit "todo" im Dateinamen wurde gelöscht
+					// A Markdown file with "todo" in the file name was deleted
 					todoCount--;
-					updateStatusBarTodoCount(statusBarTodoCount);
+					this.updateStatusBarTodoCount();
 				}
 			})
 		);
+
+		this.todoEventListenersAdded = true;
 	}
 
 	onunload() {
@@ -298,17 +339,6 @@ export default class Yesterday extends Plugin {
 	async saveSettings() {
 		await this.saveData(this.settings);
 	}
-
-}
-
-function updateStatusBarTodoCount(barElement: HTMLElement) {
-	let text: String;
-	if (todoCount === 1) {
-		text = ' open entry';
-	} else {
-		text = ' open entries';
-	}
-	barElement.setText(todoCount.toString() + text);
 }
 
 function getPath() {
@@ -401,6 +431,17 @@ class YesterdaySettingTab extends PluginSettingTab {
 					this.plugin.settings.hideMediaFiles = value;
 					await this.plugin.saveSettings();
 					this.plugin.setMediaClasses();
+				}));
+
+		new Setting(containerEl)
+			.setName('Show Open Entry Count')
+			.setDesc('Shows the number of open entries in the status bar (only on desktop)')
+			.addToggle(toggle => toggle
+				.setValue(this.plugin.settings.showTodoCount)
+				.onChange(async (value) => {
+					this.plugin.settings.showTodoCount = value;
+					await this.plugin.saveSettings();
+					this.plugin.setStatusBar();
 				}));
 	}
 }

@@ -20,7 +20,7 @@ export class YesterdayMedia extends MarkdownRenderChild {
     // if (items.length > 1) {
     container.addClass("image-grid");
     // }
-    MarkdownRenderer.renderMarkdown(markdownItems.join(""), container, null, null);
+    MarkdownRenderer.renderMarkdown(markdownItems.join(""), container, null, this);
     this.containerEl.replaceWith(container);
   }
 

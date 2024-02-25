@@ -65,17 +65,7 @@
 div {
   /* Making sure the dialog is not displayed over the text */
   clear: both;
-
-  /* margin-bottom: 0 !important;
-    padding-bottom: 0 !important; */
 }
-
-/* ul.yesterday-dialog {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 25px;
-  margin-top: 25px;
-} */
 
 ul.yesterday-dialog {
   overflow: hidden; /* Contain floated children without traditional clearfix */
