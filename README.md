@@ -41,7 +41,7 @@ On the way home she found this lame joke:
 
 If you have your journal in its own vault you can
 
-- clean up the sidebar to show only markdown files and hide all the media and
+- clean up the sidebar to show only notes and hide all media and
 - color code open and closed entries.
 
 Before             |  After

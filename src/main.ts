@@ -1,4 +1,4 @@
-import { App, MarkdownRenderer, Notice, Plugin, PluginSettingTab, Setting, Vault, TFile } from 'obsidian';
+import { App, MarkdownRenderer, Notice, Plugin, PluginSettingTab, Setting, TFile } from 'obsidian';
 import { YesterdayMedia, ImageModal } from "./media"
 import { YesterdayDialog } from "./dialogs"
 
@@ -407,12 +407,8 @@ class YesterdaySettingTab extends PluginSettingTab {
 
 		containerEl.empty();
 
-		containerEl.createEl('h2', { text: 'Configure Yesterday' });
-		let p = containerEl.createEl('p', { text: 'More information on ' });
-		p.createEl('a', { href: 'https://www.yesterday.md', text: 'yesterday.md' });
-
 		new Setting(containerEl)
-			.setName('Color Entries')
+			.setName('Color entries')
 			.setDesc('Highlights open and resolved entries in different colors')
 			.addToggle(toggle => toggle
 				.setValue(this.plugin.settings.colorMarkdownFiles)
@@ -423,7 +419,7 @@ class YesterdaySettingTab extends PluginSettingTab {
 				}));
 
 		new Setting(containerEl)
-			.setName('Hide Media Files')
+			.setName('Hide media files')
 			.setDesc('Only show markdown files in the file explorer')
 			.addToggle(toggle => toggle
 				.setValue(this.plugin.settings.hideMediaFiles)
@@ -434,7 +430,7 @@ class YesterdaySettingTab extends PluginSettingTab {
 				}));
 
 		new Setting(containerEl)
-			.setName('Show Open Entry Count')
+			.setName('Show open entry count')
 			.setDesc('Shows the number of open entries in the status bar (only on desktop)')
 			.addToggle(toggle => toggle
 				.setValue(this.plugin.settings.showTodoCount)

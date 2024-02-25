@@ -3,7 +3,7 @@
 	"name": "Yesterday",
 	"version": "1.0.0",
 	"minAppVersion": "0.12.0",
-	"description": "Transforms Obsidian into a visually stunning diary",
+	"description": "Transforms Obsidian into a visually stunning diary.",
 	"author": "Dominik Mayer",
 	"authorUrl": "https://www.yesterday.md",
 	"isDesktopOnly": false
