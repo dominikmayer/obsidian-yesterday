@@ -70,6 +70,19 @@ div {
     padding-bottom: 0 !important; */
 }
 
+/* ul.yesterday-dialog {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 25px;
+  margin-top: 25px;
+} */
+
+ul.yesterday-dialog {
+  overflow: hidden; /* Contain floated children without traditional clearfix */
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
 ul.yesterday-dialog li {
   display: inline-block;
   clear: both;
@@ -78,6 +91,13 @@ ul.yesterday-dialog li {
   margin-bottom: 0px;
   margin-top: 4px;
   max-width: calc(100% - 50px);
+}
+
+ul.yesterday-dialog li.their-dialog.emoji-only, ul.yesterday-dialog li.my-dialog.emoji-only {
+  background-color: transparent;
+  font-size: 2em;
+  padding-left: 0px;
+  padding-right: 0px;
 }
 
 ul.yesterday-dialog li.their-dialog {
