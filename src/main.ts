@@ -30,10 +30,6 @@ export default class Yesterday extends Plugin {
 		this.addSettingTab(new YesterdaySettingTab(this.app, this));
 		this.registerMarkdownPostProcessors();
 		this.setStatusBar();
-
-		// When registering intervals, this function will automatically clear the interval when the plugin is disabled.
-		this.registerInterval(window.setInterval(() => console.log('setInterval'), 5 * 60 * 1000));
-
 	}
 
 	// Creates icons in the left ribbon
@@ -377,7 +373,7 @@ async function runCommand(command: string) {
 }
 
 function pad(number: number, length: number) {
-	var str = "" + number
+	let str = "" + number
 	while (str.length < length) {
 		str = '0' + str
 	}
