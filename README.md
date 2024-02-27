@@ -4,7 +4,7 @@ This plugin lets you create and edit a [Yesterday](https://www.yesterday.md) jou
 
 I supports advanced formatting for journal entries including support for
 
-- dialogs
+- dialogs (or WhatsApp, Messenger, iMessage, … chats)
 - dreams
 - media [content blocks](https://ia.net/writer/support/library/content-blocks)
 

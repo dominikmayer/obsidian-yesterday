@@ -75,6 +75,10 @@ ul.yesterday-dialog {
   overflow: hidden; /* Contain floated children without traditional clearfix */
   margin-top: 40px;
   margin-bottom: 40px;
+  
+  padding-inline-start: 0px;
+  padding-left: 36px;
+  padding-right: 36px
 }
 
 ul.yesterday-dialog li {
@@ -85,6 +89,9 @@ ul.yesterday-dialog li {
   margin-top: 2px;
   padding-bottom: 0px;
   padding-top: 0px;
+}
+
+ul.yesterday-dialog li p {
   max-width: calc(100% - 50px);
 }
 
