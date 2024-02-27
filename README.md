@@ -2,7 +2,7 @@
 
 This plugin lets you create and edit a [Yesterday](https://www.yesterday.md) journal in [Obsidian](https://obsidian.md).
 
-I supports advanced formatting for journal entries including support for
+It supports advanced formatting for journal entries including support for
 
 - dialogs (or WhatsApp, Messenger, iMessage, … chats)
 - dreams
