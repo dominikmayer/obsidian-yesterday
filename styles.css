@@ -78,7 +78,8 @@ ul.yesterday-dialog {
 }
 
 ul.yesterday-dialog li {
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
   clear: both;
   margin-bottom: 0px;
   margin-top: 2px;
@@ -87,29 +88,26 @@ ul.yesterday-dialog li {
   max-width: calc(100% - 50px);
 }
 
-ul.yesterday-dialog li .dialog-speaker,
-ul.yesterday-dialog li .dialog-comment {
+ul.yesterday-dialog li .dialog-meta {
   display: inline;
   padding: 0px 0px;
   margin: 0px;
   font-size: 0.8em;
 }
 
-ul.yesterday-dialog li .dialog-comment {
+ul.yesterday-dialog li .dialog-meta {
   font-size: 0.8em;
   padding: 0px 4px;
   margin-top: 0px;
   margin-bottom: 0px;
 }
 
-ul.yesterday-dialog li .dialog-speaker+.dialog-comment {
-  margin-left: -5px;
-  padding-left: 0px;
+ul.yesterday-dialog li .dialog-comment {
   font-style: italic;
 }
 
 li .dialog-speaker+.dialog-comment::before {
-  content: "(";
+  content: " (";
 }
 
 li .dialog-speaker+.dialog-comment::after {
@@ -121,15 +119,14 @@ ul.yesterday-dialog li .dialog-statement {
   margin-bottom: 0px;
   padding: 5px 10px;
   border-radius: 5px;
+  width: fit-content;
 }
 
-ul.yesterday-dialog li.their-dialog .dialog-speaker,
-ul.yesterday-dialog li.their-dialog .dialog-comment {
+ul.yesterday-dialog li.their-dialog .dialog-meta {
   padding-left: 10px;
 }
 
-ul.yesterday-dialog li.my-dialog .dialog-speaker,
-ul.yesterday-dialog li.my-dialog .dialog-comment {
+ul.yesterday-dialog li.my-dialog .dialog-meta {
   padding-right: 10px;
 }
 
@@ -143,10 +140,6 @@ ul.yesterday-dialog li.their-dialog.emoji-only .dialog-statement, ul.yesterday-d
   font-size: 2em;
 }
 
-ul.yesterday-dialog li.their-dialog {
-  float: left;
-}
-
 ul.yesterday-dialog li.their-dialog .dialog-statement {
   background: #eee;
   color: #021310;
@@ -155,8 +148,8 @@ ul.yesterday-dialog li.their-dialog .dialog-statement {
 }
 
 ul.yesterday-dialog li.my-dialog {
-  float: right;
   text-align: right;
+  align-items: flex-end;
 }
 
 ul.yesterday-dialog li.my-dialog .dialog-statement {
@@ -171,10 +164,8 @@ ul.yesterday-dialog li.my-dialog .dialog-statement {
   margin-top: 5px;
 }
 
-.my-dialog+.their-dialog .dialog-speaker+.dialog-statement,
-.my-dialog+.their-dialog .dialog-comment+.dialog-statement,
-.their-dialog+.my-dialog .dialog-speaker+.dialog-statement,
-.their-dialog+.my-dialog .dialog-comment+.dialog-statement {
+.my-dialog+.their-dialog .dialog-meta+.dialog-statement,
+.their-dialog+.my-dialog .dialog-meta+.dialog-statement {
   margin-top: 0px;
 }
 

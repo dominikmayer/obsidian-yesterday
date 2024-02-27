@@ -1,3 +1,4 @@
+import { create } from "domain";
 import { MarkdownRenderChild, MarkdownRenderer } from "obsidian";
 
 export class YesterdayDialog extends MarkdownRenderChild {
@@ -62,9 +63,11 @@ export class YesterdayDialog extends MarkdownRenderChild {
 
     const dialogType = this.speakersMap.get(speaker.toLowerCase()) || "their-dialog";
     const showSpeaker = !this.spokenYet.has(speaker.toLowerCase());
+    const hasComment = comment !== "";
 
     const line = document.createElement("li");
-    const speakerElement = createEl("p");
+
+    const speakerElement = createEl("span");
     speakerElement.addClass("dialog-speaker");
 
     const statementElement = createEl("p");
@@ -72,17 +75,24 @@ export class YesterdayDialog extends MarkdownRenderChild {
 
     line.classList.add(dialogType);
 
-    // Construct the line content. Implementation depends on your format
-    if (showSpeaker) {
-      speakerElement.textContent = `${speaker}`;
-      line.appendChild(speakerElement);
+    if (showSpeaker || hasComment) {
+      const metaElement = createEl("p");
+      metaElement.addClass("dialog-meta");
+      line.appendChild(metaElement);
+
+      // Construct the line content. Implementation depends on your format
+      if (showSpeaker) {
+        speakerElement.textContent = `${speaker}`;
+        metaElement.appendChild(speakerElement);
+      }
+      if (hasComment) {
+        const commentElement = createEl("span");
+        commentElement.addClass("dialog-comment");
+        commentElement.textContent = `${comment}`;
+        metaElement.appendChild(commentElement);
+      }
     }
-    if (comment !== "") {
-      const commentElement = createEl("p");
-      commentElement.addClass("dialog-comment");
-      commentElement.textContent = `${comment}`;
-      line.appendChild(commentElement);
-    }
+
     if (this.isOnlyEmoji(statement)) {
       line.classList.add("emoji-only");
     }
