@@ -2,13 +2,15 @@
 
 This plugin lets you create and edit a [Yesterday](https://www.yesterday.md) journal in [Obsidian](https://obsidian.md).
 
-It supports advanced formatting for journal entries including support for
+### Yesterday Syntax
+
+Yesterday extends [Markdown](https://www.markdownguide.org/basic-syntax/) with support for journal entries including support for
 
 - dialogs (or WhatsApp, Messenger, iMessage, … chats)
 - dreams
 - media [content blocks](https://ia.net/writer/support/library/content-blocks)
 
-Example:
+#### Edit Mode
 
 ```
 ---
@@ -47,11 +49,13 @@ While walking home, Karen shared a joke that unexpectedly lightened the mood:
 .Patient: 😳
 ```
 
+#### View Mode
+
 ![Example rendering](https://ik.imagekit.io/mitado/obsidian-yesterday-example_yuoXeej6j.png?updatedAt=1708879259580)
 
 Clicking on any image shows a larger version.
 
-### Journal vault
+### Journal Vault
 
 If you have your journal in its own vault you can
 
@@ -68,5 +72,14 @@ Icons and commands (that can be activated by [hotkeys](https://help.obsidian.md/
 - toggle entries between open and closed.
 
 You can show the number of open entries in the status bar.
+
+### Installation
+
+While the plugin is not yet available in the community plugins list, you can install it
+
+- using [BRAT](https://github.com/TfTHacker/obsidian42-brat) or
+- manually by downloading the latest release from the [GitHub repository](https://github.com/dominikmayer/obsidian-yesterday) and putting it in your plugins folder.
+
+### Read On
 
 For further information check out [Yesterday](https://www.yesterday.md).
