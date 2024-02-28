@@ -75,7 +75,7 @@ ul.yesterday-dialog {
   overflow: hidden; /* Contain floated children without traditional clearfix */
   margin-top: 40px;
   margin-bottom: 40px;
-  
+
   padding-inline-start: 0px;
   padding-left: 36px;
   padding-right: 36px
@@ -139,12 +139,9 @@ ul.yesterday-dialog li.my-dialog .dialog-meta {
 
 ul.yesterday-dialog li.their-dialog.emoji-only .dialog-statement, ul.yesterday-dialog li.my-dialog.emoji-only .dialog-statement {
   background-color: transparent;
-  padding-left: 0px;
-  padding-right: 0px;
-}
-
-ul.yesterday-dialog li.their-dialog.emoji-only .dialog-statement, ul.yesterday-dialog li.my-dialog.emoji-only .dialog-statement {
+  padding: 0px;
   font-size: 2em;
+  line-height: 1em;
 }
 
 ul.yesterday-dialog li.their-dialog .dialog-statement {
