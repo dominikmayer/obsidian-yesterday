@@ -1,16 +1,4 @@
-<div>
-    <img src="https://images.unsplash.com/photo-1635701651842-8b43c35b81fc?ixlib=rb-4.0.3&amp;q=85&amp;fm=jpg&amp;crop=entropy&amp;cs=srgb&amp;w=3600" referrerpolicy="same-origin" style="display: block; object-fit: cover; border-radius: 0px; width: 100%; height: 30vh; opacity: 1; object-position: center 50%;">
-    <div style="user-select: none; --pseudoSelection--background: transparent; pointer-events: none;">
-        <div style="display: flex; align-items: center; justify-content: center; height: 140px; width: 140px; border-radius: 0.25em; flex-shrink: 0; position: relative; z-index: 1; margin-left: 3px; margin-bottom: 0px; margin-top: -80px; pointer-events: auto;">
-            <div>
-                <div style="width: 100%; height: 100%;">
-                    <img alt="Page icon" src="yesterday-logo.svg" referrerpolicy="same-origin" style="display: block; object-fit: cover; border-radius: 4px; width: 124.32px; height: 124.32px; transition: opacity 100ms ease-out 0s;">
-                </div>
-            </div>
-        </div>
-        <div style="display: flex; justify-content: flex-start; flex-wrap: wrap; margin-top: 8px; margin-bottom: 4px; margin-left: -1px; color: rgba(255, 255, 255, 0.282); pointer-events: auto;"></div>
-    </div>
-</div>
+<img alt="Yesterday logo" src="yesterday-logo.svg" width="125" height="125">
 
 ## Yesterday
 
