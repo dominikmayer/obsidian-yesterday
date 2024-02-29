@@ -20,6 +20,7 @@
   max-width: 100%;
   vertical-align: bottom;
   object-fit: cover;
+  border-radius: 15px;
 }
 
 .media-embed img:hover {
@@ -63,6 +64,7 @@
 .callout[data-callout="yesterday-dream"] {
   --callout-color: 128, 0, 128;
   --callout-icon: bed-double;
+  border-radius: 15px;
 }
 
 .callout[data-callout="yesterday-todo"] {
