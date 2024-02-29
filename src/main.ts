@@ -34,11 +34,11 @@ export default class Yesterday extends Plugin {
 
 	// Creates icons in the left ribbon
 	addRibbonIcons() {
-		const newEntryRibbon = this.addRibbonIcon('create-new', 'Create Entry', (evt: MouseEvent) => {
+		const newEntryRibbon = this.addRibbonIcon('create-new', 'Create entry', (evt: MouseEvent) => {
 			this.createEntry();
 		});
 
-		const toggleTodoRibbon = this.addRibbonIcon('checkmark', 'Toggle To Do', (evt: MouseEvent) => {
+		const toggleTodoRibbon = this.addRibbonIcon('checkmark', 'Toggle draft/complete', (evt: MouseEvent) => {
 			this.toggleTodo();
 		});
 	}
@@ -54,7 +54,7 @@ export default class Yesterday extends Plugin {
 
 		this.addCommand({
 			id: 'toggle-to-do',
-			name: 'Toggle entry to do',
+			name: 'Toggle draft/complete',
 			callback: () => {
 				this.toggleTodo();
 			}
