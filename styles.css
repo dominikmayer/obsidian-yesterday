@@ -29,11 +29,11 @@
 
 /* Color entries */
 .color-markdown-files .nav-file-title[data-path$="md"] .nav-file-title-content {
-  color: var(--color-green);
+  color: var(--text-success);
 }
 
 .color-markdown-files .nav-file-title[data-path$="todo.md"] .nav-file-title-content {
-  color: var(--color-red);
+  color: var(--text-error);
 }
 
 /* Hide media files */
@@ -44,7 +44,7 @@
 }
 
 .yesterday-todo, .yesterday-todo ~ div {
-  color: orange;
+  color: var(--text-warning);
 }
 
 /* Hide comments */
@@ -143,8 +143,8 @@ ul.yesterday-dialog li.their-dialog.emoji-only .dialog-statement, ul.yesterday-d
 }
 
 ul.yesterday-dialog li.their-dialog .dialog-statement {
-  background: #eee;
-  color: #021310;
+  background: var(--color-base-30);
+  color: var(--color-base-100);
   border-top-right-radius: var(--radius-xl);
   border-bottom-right-radius: var(--radius-xl);
 }
@@ -155,8 +155,8 @@ ul.yesterday-dialog li.my-dialog {
 }
 
 ul.yesterday-dialog li.my-dialog .dialog-statement {
-  background: #0084ff;
-  color: #fff;
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
   border-top-left-radius: var(--radius-xl);
   border-bottom-left-radius: var(--radius-xl);
 }
