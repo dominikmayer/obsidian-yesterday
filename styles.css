@@ -6,7 +6,7 @@
 }
 
 .image-grid figure {
-  margin: 2px !important;
+  margin: var(--size-2-1) !important;
   height: 20vw;
   position: relative;
   overflow: hidden;
@@ -16,11 +16,11 @@
 .image-grid img,
 .image-grid video {
   height: 20vw;
-  margin: 0 2px 2px 0;
+  margin: 0 var(--size-2-1) var(--size-2-1) 0;
   max-width: 100%;
   vertical-align: bottom;
   object-fit: cover;
-  border-radius: 15px;
+  border-radius: var(--radius-xl);
 }
 
 .media-embed img:hover {
@@ -28,20 +28,12 @@
 }
 
 /* Color entries */
-.theme-dark.color-markdown-files .nav-file-title[data-path$="md"] .nav-file-title-content {
-  color: yellowgreen;
+.color-markdown-files .nav-file-title[data-path$="md"] .nav-file-title-content {
+  color: var(--color-green);
 }
 
-.theme-light.color-markdown-files .nav-file-title[data-path$="md"] .nav-file-title-content {
-  color: rgb(123, 164, 41);
-}
-
-.theme-dark.color-markdown-files .nav-file-title[data-path$="todo.md"] .nav-file-title-content {
-  color: red;
-}
-
-.theme-light.color-markdown-files .nav-file-title[data-path$="todo.md"] .nav-file-title-content {
-  color: rgb(197, 18, 18);
+.color-markdown-files .nav-file-title[data-path$="todo.md"] .nav-file-title-content {
+  color: var(--color-red);
 }
 
 /* Hide media files */
@@ -64,7 +56,7 @@
 .callout[data-callout="yesterday-dream"] {
   --callout-color: 128, 0, 128;
   --callout-icon: bed-double;
-  border-radius: 15px;
+  border-radius: var(--radius-xl);
 }
 
 .callout[data-callout="yesterday-todo"] {
@@ -79,12 +71,12 @@ div {
 
 ul.yesterday-dialog {
   overflow: hidden; /* Contain floated children without traditional clearfix */
-  margin-top: 40px;
-  margin-bottom: 40px;
+  margin-top: var(--size-4-9);
+  margin-bottom: var(--size-4-9);
 
   padding-inline-start: 0px;
-  padding-left: 36px;
-  padding-right: 36px
+  padding-left: var(--size-4-9);
+  padding-right: var(--size-4-9);
 }
 
 ul.yesterday-dialog li {
@@ -92,7 +84,7 @@ ul.yesterday-dialog li {
   flex-direction: column;
   clear: both;
   margin-bottom: 0px;
-  margin-top: 2px;
+  margin-top: var(--size-2-1);
   padding-bottom: 0px;
   padding-top: 0px;
 }
@@ -105,12 +97,12 @@ ul.yesterday-dialog li .dialog-meta {
   display: inline;
   padding: 0px 0px;
   margin: 0px;
-  font-size: 0.8em;
+  font-size: var(--font-smallest);
 }
 
 ul.yesterday-dialog li .dialog-meta {
-  font-size: 0.8em;
-  padding: 0px 4px;
+  font-size: var(--font-smallest);
+  padding: 0px var(--size-2-2);
   margin-top: 0px;
   margin-bottom: 0px;
 }
@@ -130,17 +122,17 @@ li .dialog-speaker+.dialog-comment::after {
 ul.yesterday-dialog li .dialog-statement {
   margin-top: 0px;
   margin-bottom: 0px;
-  padding: 5px 10px;
-  border-radius: 5px;
+  padding: var(--size-4-1) var(--size-4-3);
+  border-radius: var(--radius-s);
   width: fit-content;
 }
 
 ul.yesterday-dialog li.their-dialog .dialog-meta {
-  padding-left: 10px;
+  padding-left: var(--size-4-2);
 }
 
 ul.yesterday-dialog li.my-dialog .dialog-meta {
-  padding-right: 10px;
+  padding-right: var(--size-4-2);
 }
 
 ul.yesterday-dialog li.their-dialog.emoji-only .dialog-statement, ul.yesterday-dialog li.my-dialog.emoji-only .dialog-statement {
@@ -153,8 +145,8 @@ ul.yesterday-dialog li.their-dialog.emoji-only .dialog-statement, ul.yesterday-d
 ul.yesterday-dialog li.their-dialog .dialog-statement {
   background: #eee;
   color: #021310;
-  border-top-right-radius: 15px;
-  border-bottom-right-radius: 15px;
+  border-top-right-radius: var(--radius-xl);
+  border-bottom-right-radius: var(--radius-xl);
 }
 
 ul.yesterday-dialog li.my-dialog {
@@ -165,13 +157,13 @@ ul.yesterday-dialog li.my-dialog {
 ul.yesterday-dialog li.my-dialog .dialog-statement {
   background: #0084ff;
   color: #fff;
-  border-top-left-radius: 15px;
-  border-bottom-left-radius: 15px;
+  border-top-left-radius: var(--radius-xl);
+  border-bottom-left-radius: var(--radius-xl);
 }
 
 .my-dialog+.their-dialog .dialog-statement,
 .their-dialog+.my-dialog .dialog-statement {
-  margin-top: 5px;
+  margin-top: var(--size-4-1);
 }
 
 .my-dialog+.their-dialog .dialog-meta+.dialog-statement,
@@ -180,41 +172,41 @@ ul.yesterday-dialog li.my-dialog .dialog-statement {
 }
 
 .their-dialog+.my-dialog .dialog-statement {
-  border-top-right-radius: 15px;
+  border-top-right-radius: var(--radius-xl);
 }
 
 .my-dialog+.their-dialog .dialog-statement,
 .their-dialog.end-speech+.their-dialog .dialog-statement {
-  border-top-left-radius: 15px;
+  border-top-left-radius: var(--radius-xl);
 }
 
 .my-dialog.end-speech .dialog-statement {
-  border-bottom-right-radius: 15px;
+  border-bottom-right-radius: var(--radius-xl);
 }
 
 .their-dialog.end-speech .dialog-statement {
-  border-bottom-left-radius: 15px;
+  border-bottom-left-radius: var(--radius-xl);
 }
 
 .yesterday-dialog li:nth-child(1 of .my-dialog) .dialog-statement {
-  border-top-right-radius: 15px;
+  border-top-right-radius: var(--radius-xl);
 }
 
 .yesterday-dialog li:nth-child(1 of .their-dialog) .dialog-statement {
-  border-top-left-radius: 15px;
+  border-top-left-radius: var(--radius-xl);
 }
 
 .yesterday-dialog li:nth-last-child(1 of .their-dialog) .dialog-statement {
-  border-bottom-left-radius: 15px;
+  border-bottom-left-radius: var(--radius-xl);
   margin-bottom: 1em;
 }
 
 .yesterday-dialog li:nth-last-child(1 of .my-dialog) .dialog-statement {
-  border-bottom-right-radius: 15px;
+  border-bottom-right-radius: var(--radius-xl);
   margin-bottom: 1em;
 }
 
 .yesterday-dialog li:nth-last-child(1 of .their-dialog) .dialog-statement {
-  border-bottom-left-radius: 15px;
+  border-bottom-left-radius: var(--radius-xl);
   margin-bottom: 1em;
 }
