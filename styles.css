@@ -27,12 +27,20 @@
 }
 
 /* Color entries */
-.color-markdown-files .nav-file-title[data-path$="md"] .nav-file-title-content {
+.theme-dark.color-markdown-files .nav-file-title[data-path$="md"] .nav-file-title-content {
   color: yellowgreen;
 }
 
-.color-markdown-files .nav-file-title[data-path$="todo.md"] .nav-file-title-content {
+.theme-light.color-markdown-files .nav-file-title[data-path$="md"] .nav-file-title-content {
+  color: rgb(123, 164, 41);
+}
+
+.theme-dark.color-markdown-files .nav-file-title[data-path$="todo.md"] .nav-file-title-content {
   color: red;
+}
+
+.theme-light.color-markdown-files .nav-file-title[data-path$="todo.md"] .nav-file-title-content {
+  color: rgb(197, 18, 18);
 }
 
 /* Hide media files */
@@ -40,10 +48,6 @@
 .hide-media-files .nav-file-title[data-path$='.jpg'],
 .hide-media-files .nav-file-title[data-path$='.png'] {
   display: none;
-}
-
-.nav-file-title.is-active {
-  background-color: #404040;
 }
 
 .yesterday-todo, .yesterday-todo ~ div {
