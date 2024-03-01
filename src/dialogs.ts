@@ -4,7 +4,37 @@ import { MarkdownRenderChild, MarkdownRenderer } from "obsidian";
 export class YesterdayDialog extends MarkdownRenderChild {
   text: string;
   speakersMap = new Map<string, string>();
-  userSpeakers = ["ich", "me", "je"]; // List of user speaker identifiers
+  userSpeakers = [ // List of user speaker identifiers
+    "أنا", // Arabic
+    "আমি", // Bengali
+    "我", // Chinese
+    "ik", // Dutch
+    "me", // English
+    "minä", "mä", // Finnish
+    "moi", // French
+    "ich", // German
+    "εγώ", // Greek
+    "אני", // Hebrew
+    "मैं", // Hindi
+    "aku", "saya", // Indonesian
+    "私", "わたし", // Japanese
+    "나", "저", // Korean
+    "ego", // Latin
+    "saya", "aku", // Malay
+    "jeg", // Norwegian
+    "من", // Persian
+    "ja", // Polish
+    "eu", // Portuguese
+    "ਮੈਂ", // Punjabi
+    "я", // Russian
+    "yo", // Spanish
+    "jag", // Swedish
+    "ako", // Tagalog
+    "ฉัน", "ผม", // Thai
+    "میں", // Urdu
+    "tôi", "mình", // Vietnamese
+  ];
+
   allSpeakers: Set<string> = new Set();
   spokenYet: Set<string> = new Set();
   lastSpeaker: string = null;
