@@ -12,7 +12,7 @@ Yesterday extends [Markdown](https://www.markdownguide.org/basic-syntax/) with s
 - dreams
 - media [content blocks](https://ia.net/writer/support/library/content-blocks)
 
-Learn more [here](https://mitado.notion.site/How-to-write-d3d76812fdef4bf3aa48d727d53c6e0d)
+Learn more [here.](https://mitado.notion.site/How-to-write-d3d76812fdef4bf3aa48d727d53c6e0d)
 
 #### Example
 
@@ -53,7 +53,7 @@ While walking home, Karen shared a joke that unexpectedly lightened the mood:
 .Patient: 😳
 ```
 
-![Example rendering](https://ik.imagekit.io/mitado/obsidian-yesterday-example_yuoXeej6j.png?updatedAt=1708879259580)
+![Example rendering](https://ik.imagekit.io/mitado/obsidian-yesterday-example_yuoXeej6j.png)
 
 Click on any image to show a larger version.
 

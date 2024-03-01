@@ -32,7 +32,7 @@ export class YesterdayDialog extends MarkdownRenderChild {
     "ako", // Tagalog
     "ฉัน", "ผม", // Thai
     "میں", // Urdu
-    "tôi", "mình", // Vietnamese
+    "tôi", "mình" // Vietnamese
   ];
 
   allSpeakers: Set<string> = new Set();
