@@ -77,10 +77,7 @@ You can show the number of open entries in the status bar.
 
 ### Installation
 
-While the plugin is not yet available in the community plugins list, you can install it
-
-- using [BRAT](https://github.com/TfTHacker/obsidian42-brat) or
-- manually by downloading the latest release from the [GitHub repository](https://github.com/dominikmayer/obsidian-yesterday) and putting it in your plugins folder.
+You can install the plugin from within Obsidian by searching for `Yesterday` in the Community Plugins section or by clicking [here](https://obsidian.md/plugins?id=yesterday).
 
 ### Read On
 
