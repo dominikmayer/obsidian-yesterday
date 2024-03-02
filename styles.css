@@ -23,8 +23,8 @@
   border-radius: var(--radius-xl);
 }
 
-.is-mobile .image-grid img,
-.is-mobile .image-grid video {
+.is-mobile:not(.is-tablet) .image-grid img,
+.is-mobile:not(.is-tablet) .image-grid video {
   height: 40vw;
 }
 
