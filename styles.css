@@ -79,6 +79,11 @@ ul.yesterday-dialog {
   padding-right: var(--size-4-9);
 }
 
+.is-mobile ul.yesterday-dialog {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
 ul.yesterday-dialog li {
   display: flex;
   flex-direction: column;
