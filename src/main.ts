@@ -76,18 +76,27 @@ export default class Yesterday extends Plugin {
 
 	inDream = false;
 	dreamContent = "";
-	dreamParagraphsToRemove: HTMLParagraphElement[] = [];
+	dreamParagraphsToRemove: Element[] = [];
 
 	inTodo = false;
 	todoContent = "";
-	todoParagraphsToRemove: HTMLParagraphElement[] = [];
+	todoParagraphsToRemove: HTMLElement[] = [];
 
 	registerMarkdownPostProcessors() {
 		this.registerMarkdownPostProcessor((element, context) => {
-			const paragraphs = Array.from(element.querySelectorAll("p"));
+			const elements = Array.from(element.querySelectorAll("p, hr"));
 
-			paragraphs.forEach((paragraph) => {
-				const text = paragraph.innerText.trim();
+			// const paragraphs = elements.map(paragraph => {
+				
+			// })
+
+			elements.forEach((element) => {
+				let text: string;
+				if (element.tagName === "HR") {
+					text = "---";
+				} else if (element.tagName === "P") {
+					text = (element as HTMLElement).innerText.trim();
+				}
 
 				const isImage = text[0] === "/" && mediaExtensions.some(extension => text.endsWith(extension));
 				const isComment = text.startsWith("///");
@@ -98,15 +107,15 @@ export default class Yesterday extends Plugin {
 				const isTodoEnd = text.endsWith("++");
 
 				if (isImage) {
-					context.addChild(new YesterdayMedia(paragraph, text));
+					context.addChild(new YesterdayMedia((element as HTMLElement), text));
 				}
 
 				if (isComment) {
-					paragraph.parentElement.addClass("yesterday-comment");
+					element.parentElement.addClass("yesterday-comment");
 				}
 
 				if (isDialog) {
-					context.addChild(new YesterdayDialog(paragraph, text));
+					context.addChild(new YesterdayDialog((element as HTMLElement), text));
 				}
 
 				if (isDreamStart && !this.inDream) {
@@ -115,11 +124,12 @@ export default class Yesterday extends Plugin {
 				}
 
 				if (this.inDream) {
+					console.log(text);
 					let textWithoutMarkers = text.replace(/^§§§|§§§$/g, '').trim();
 					this.dreamContent += `> ${textWithoutMarkers}\n`;
 					if (!isDreamEnd) {
 						this.dreamContent += `> \n`;
-						this.dreamParagraphsToRemove.push(paragraph);
+						this.dreamParagraphsToRemove.push(element);
 					}
 				}
 
@@ -128,13 +138,13 @@ export default class Yesterday extends Plugin {
 					this.dreamParagraphsToRemove.forEach(element => {
 						element.remove();
 					});
-					const container = paragraph.createDiv();
+					const container = element.createDiv();
 					MarkdownRenderer.renderMarkdown(this.dreamContent, container, null, this);
-					paragraph.replaceWith(container);
+					element.replaceWith(container);
 				}
 
 				if (isTodoStart) {
-					paragraph.parentElement.addClass("yesterday-todo");
+					element.parentElement.addClass("yesterday-todo");
 				}
 			});
 		});
