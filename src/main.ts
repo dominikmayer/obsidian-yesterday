@@ -1,4 +1,4 @@
-import { App, MarkdownRenderer, Notice, Plugin, PluginSettingTab, Setting, TFile } from 'obsidian';
+import { App, MarkdownRenderer, Notice, Platform, Plugin, PluginSettingTab, Setting, TFile } from 'obsidian';
 import { YesterdayMedia, ImageModal } from "./media"
 import { YesterdayDialog } from "./dialogs"
 
@@ -62,14 +62,16 @@ export default class Yesterday extends Plugin {
 	}
 
 	handleImageClicks() {
-		this.registerDomEvent(document, 'click', (event: MouseEvent) => {
-			let target = event.target as HTMLElement;
+		if (!Platform.isMobile) {
+			this.registerDomEvent(document, 'click', (event: MouseEvent) => {
+				let target = event.target as HTMLElement;
 
-			if (target.tagName === 'IMG' && target.closest('.media-embed')) {
-				let imgSrc = (target as HTMLImageElement).src;
-				new ImageModal(this.app, imgSrc).open();
-			}
-		});
+				if (target.tagName === 'IMG' && target.closest('.media-embed')) {
+					let imgSrc = (target as HTMLImageElement).src;
+					new ImageModal(this.app, imgSrc).open();
+				}
+			});
+		}
 	}
 
 	inDream = false;
@@ -141,7 +143,7 @@ export default class Yesterday extends Plugin {
 	updateTodoCount() {
 		// Reset todoCount
 		todoCount = 0;
-	
+
 		// Calculate todoCount based on current vault state
 		const files = this.app.vault.getMarkdownFiles();
 		files.forEach(file => {
@@ -149,7 +151,7 @@ export default class Yesterday extends Plugin {
 				todoCount++;
 			}
 		});
-	
+
 		// Update the status bar item if it exists
 		if (this.statusBarTodoCount) {
 			this.updateStatusBarTodoCount();
@@ -158,7 +160,7 @@ export default class Yesterday extends Plugin {
 
 	updateStatusBarTodoCount() {
 		if (!this.statusBarTodoCount) return;
-	
+
 		let text: String;
 		if (todoCount === 1) {
 			text = ' open entry';
