@@ -1,8 +1,7 @@
 import { App, MarkdownRenderer, Notice, Platform, Plugin, PluginSettingTab, Setting, TFile } from 'obsidian';
 import { YesterdayMedia, ImageModal } from "./media"
 import { YesterdayDialog } from "./dialogs"
-
-const mediaExtensions = ['jpg', 'jpeg', 'png'];
+import { mediaExtensions } from './constants';
 
 interface YesterdaySettings {
 	colorMarkdownFiles: boolean;
@@ -86,10 +85,6 @@ export default class Yesterday extends Plugin {
 		this.registerMarkdownPostProcessor((element, context) => {
 			const elements = Array.from(element.querySelectorAll("p, hr"));
 
-			// const paragraphs = elements.map(paragraph => {
-				
-			// })
-
 			elements.forEach((element) => {
 				let text: string;
 				if (element.tagName === "HR") {
@@ -98,7 +93,7 @@ export default class Yesterday extends Plugin {
 					text = (element as HTMLElement).innerText.trim();
 				}
 
-				const isImage = text[0] === "/" && mediaExtensions.some(extension => text.endsWith(extension));
+				const isMedia = text[0] === "/" && mediaExtensions.some(extension => text.endsWith(extension));
 				const isComment = text.startsWith("///");
 				const isDialog = text.startsWith(".") && text.contains(":");
 				const isDreamStart = text.startsWith("§§§");
@@ -106,7 +101,7 @@ export default class Yesterday extends Plugin {
 				const isTodoStart = text.startsWith("++");
 				const isTodoEnd = text.endsWith("++");
 
-				if (isImage) {
+				if (isMedia) {
 					context.addChild(new YesterdayMedia((element as HTMLElement), text));
 				}
 
@@ -124,7 +119,6 @@ export default class Yesterday extends Plugin {
 				}
 
 				if (this.inDream) {
-					console.log(text);
 					let textWithoutMarkers = text.replace(/^§§§|§§§$/g, '').trim();
 					this.dreamContent += `> ${textWithoutMarkers}\n`;
 					if (!isDreamEnd) {

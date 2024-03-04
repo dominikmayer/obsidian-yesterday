@@ -42,9 +42,22 @@
 }
 
 /* Hide media files */
+.hide-media-files .nav-file-title[data-path$='.avi'],
+.hide-media-files .nav-file-title[data-path$='.flac'],
+.hide-media-files .nav-file-title[data-path$='.gif'],
 .hide-media-files .nav-file-title[data-path$='.jpeg'],
 .hide-media-files .nav-file-title[data-path$='.jpg'],
-.hide-media-files .nav-file-title[data-path$='.png'] {
+.hide-media-files .nav-file-title[data-path$='.m4a'],
+.hide-media-files .nav-file-title[data-path$='.m4v'],
+.hide-media-files .nav-file-title[data-path$='.mkv'],
+.hide-media-files .nav-file-title[data-path$='.mov'],
+.hide-media-files .nav-file-title[data-path$='.mp3'],
+.hide-media-files .nav-file-title[data-path$='.mp4'],
+.hide-media-files .nav-file-title[data-path$='.ogg'],
+.hide-media-files .nav-file-title[data-path$='.png'],
+.hide-media-files .nav-file-title[data-path$='.wav'],
+.hide-media-files .nav-file-title[data-path$='.webm'],
+.hide-media-files .nav-file-title[data-path$='.webp'] {
   display: none;
 }
 

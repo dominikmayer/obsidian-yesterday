@@ -1,4 +1,5 @@
 import { MarkdownRenderChild, MarkdownRenderer, App, Modal } from "obsidian";
+import { audioExtensions } from './constants';
 
 /**
  * Renders markdown images within a specified container element.
@@ -17,9 +18,10 @@ export class YesterdayMedia extends MarkdownRenderChild {
     const markdownItems = items.map(YesterdayMedia.createMarkdownImage);
 
     const container = this.containerEl.createDiv();
-    // if (items.length > 1) {
-    container.addClass("image-grid");
-    // }
+    if (items.every(item => !audioExtensions.some(extension => item.endsWith(extension)))) {
+      container.addClass("image-grid");
+    }
+
     MarkdownRenderer.renderMarkdown(markdownItems.join(""), container, null, this);
     this.containerEl.replaceWith(container);
   }
