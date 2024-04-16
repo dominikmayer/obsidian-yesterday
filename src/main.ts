@@ -7,12 +7,16 @@ interface YesterdaySettings {
 	colorMarkdownFiles: boolean;
 	hideMediaFiles: boolean;
 	showTodoCount: boolean;
+	showMediaGrid: boolean;
+	maximizeMedia: boolean;
 }
 
 const DEFAULT_SETTINGS: YesterdaySettings = {
 	colorMarkdownFiles: true,
 	hideMediaFiles: false,
-	showTodoCount: false
+	showTodoCount: false,
+	showMediaGrid: true,
+	maximizeMedia: true
 }
 
 let todoCount = 0;
@@ -65,7 +69,11 @@ export default class Yesterday extends Plugin {
 			this.registerDomEvent(document, 'click', (event: MouseEvent) => {
 				let target = event.target as HTMLElement;
 
-				if (target.tagName === 'IMG' && target.closest('.media-embed')) {
+				if (
+					target.tagName === 'IMG' && 
+					target.closest('.media-embed') && 
+					this.settings.maximizeMedia
+				) {
 					let imgSrc = (target as HTMLImageElement).src;
 					new ImageModal(this.app, imgSrc).open();
 				}
@@ -308,11 +316,11 @@ export default class Yesterday extends Plugin {
 
 	async loadSettings() {
 		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
-		this.setMediaClasses();
+		this.setHideMediaClasses();
 		this.setColorClasses();
 	}
 
-	setMediaClasses() {
+	setHideMediaClasses() {
 		if (this.settings.hideMediaFiles) {
 			document.body.classList.add('hide-media-files');
 		} else {
@@ -325,6 +333,14 @@ export default class Yesterday extends Plugin {
 			document.body.classList.add('color-markdown-files');
 		} else {
 			document.body.classList.remove('color-markdown-files');
+		}
+	}
+
+	setGridClasses() {
+		if (this.settings.showMediaGrid) {
+			document.body.classList.add('enable-media-grid');
+		} else {
+			document.body.classList.remove('enable-media-grid');
 		}
 	}
 
@@ -418,7 +434,7 @@ class YesterdaySettingTab extends PluginSettingTab {
 				.onChange(async (value) => {
 					this.plugin.settings.hideMediaFiles = value;
 					await this.plugin.saveSettings();
-					this.plugin.setMediaClasses();
+					this.plugin.setHideMediaClasses();
 				}));
 
 		new Setting(containerEl)
@@ -430,6 +446,32 @@ class YesterdaySettingTab extends PluginSettingTab {
 					this.plugin.settings.showTodoCount = value;
 					await this.plugin.saveSettings();
 					this.plugin.setStatusBar();
+				}));
+
+		containerEl.createEl('br');
+		const mediaSection = containerEl.createEl('div', {cls: 'setting-item setting-item-heading'});
+		const mediaSectionInfo =  mediaSection.createEl('div', {cls: 'setting-item-info'});
+		mediaSectionInfo.createEl('div', {text: 'Media', cls: 'setting-item-name'});
+
+		new Setting(containerEl)
+			.setName('Show media files in a grid')
+			.setDesc('Shows media files that are not separated by a new line in a grid')
+			.addToggle(toggle => toggle
+				.setValue(this.plugin.settings.showMediaGrid)
+				.onChange(async (value) => {
+					this.plugin.settings.showMediaGrid = value;
+					await this.plugin.saveSettings();
+					this.plugin.setGridClasses();
+				}));
+
+		new Setting(containerEl)
+			.setName('Maximize image')
+			.setDesc('Lets you click on an image to maximize it (only on desktop)')
+			.addToggle(toggle => toggle
+				.setValue(this.plugin.settings.maximizeMedia)
+				.onChange(async (value) => {
+					this.plugin.settings.maximizeMedia = value;
+					await this.plugin.saveSettings();
 				}));
 	}
 }

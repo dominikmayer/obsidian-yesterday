@@ -1,11 +1,11 @@
-.image-grid {
+.enable-media-grid .image-grid {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   margin-left: 0px !important;
 }
 
-.image-grid figure {
+.enable-media-grid .image-grid figure {
   margin: var(--size-2-1) !important;
   height: 20vw;
   position: relative;
@@ -13,8 +13,8 @@
   /* Removed flex-grow: 1; to stop figures from trying to fill the available space */
 }
 
-.image-grid img,
-.image-grid video {
+.enable-media-grid .image-grid img,
+.enable-media-grid .image-grid video {
   height: 20vw;
   margin: 0 var(--size-2-1) var(--size-2-1) 0;
   max-width: 100%;
@@ -23,12 +23,12 @@
   border-radius: var(--radius-xl);
 }
 
-.is-mobile:not(.is-tablet) .image-grid img,
-.is-mobile:not(.is-tablet) .image-grid video {
+.enable-media-grid .is-mobile:not(.is-tablet) .image-grid img,
+.enable-media-grid .is-mobile:not(.is-tablet) .image-grid video {
   height: 40vw;
 }
 
-.media-embed img:hover {
+.enable-media-grid .media-embed img:hover {
   opacity: 0.8;
 }
 
