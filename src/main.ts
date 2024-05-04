@@ -11,7 +11,6 @@ interface YesterdaySettings {
 	showTodoCount: boolean;
 	showMediaGrid: boolean;
 	maximizeMedia: boolean;
-	fileNameFormat: string;
 	datePropFormat: string;
 	startOfNextDay: number;
 }
@@ -22,7 +21,6 @@ const DEFAULT_SETTINGS: YesterdaySettings = {
 	showTodoCount: false,
 	showMediaGrid: true,
 	maximizeMedia: true,
-	fileNameFormat: 'YYYY-MM-DD - HH-mm-ss',
 	datePropFormat: 'YYYY-MM-DD HH:mm:ss Z',
 	startOfNextDay: 5,
 }
@@ -264,7 +262,7 @@ export default class Yesterday extends Plugin {
 	async createEntry(): Promise<void> {
 		const path = getPath(this.settings.startOfNextDay);
 		const now = dayjs();
-		const fileName = path + "/" + now.format(this.settings.fileNameFormat) + ".md";
+		const fileName = path + "/" + now.format('YYYY-MM-DD - HH-mm-ss') + ".md";
 		new Notice("Creating " + fileName);
 
 		const frontmatter = await createFrontmatter(now.format(this.settings.datePropFormat), this);
@@ -467,16 +465,6 @@ class YesterdaySettingTab extends PluginSettingTab {
 		const subHeading = containerEl.createDiv()
 		subHeading.createEl('a', {text: 'Format documentation', href: 'https://day.js.org/docs/en/display/format'});
 		containerEl.createEl('br');
-
-		new Setting(containerEl)
-			.setName('Filename format')
-			.setDesc('Format of entry\'s filename')
-			.addMomentFormat(toggle => toggle
-				.setValue(this.plugin.settings.fileNameFormat)
-				.onChange(async (value) => {
-					this.plugin.settings.fileNameFormat = value;
-					await this.plugin.saveSettings();
-				}));
 
 		new Setting(containerEl)
 			.setName('Format of \'date\' property')
