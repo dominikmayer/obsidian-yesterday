@@ -1,4 +1,6 @@
+import dayjs, { Dayjs } from 'dayjs';
 import { App, MarkdownRenderer, Notice, Platform, Plugin, PluginSettingTab, Setting, TFile } from 'obsidian';
+
 import { YesterdayMedia, ImageModal } from "./media"
 import { YesterdayDialog } from "./dialogs"
 import { mediaExtensions } from './constants';
@@ -9,6 +11,8 @@ interface YesterdaySettings {
 	showTodoCount: boolean;
 	showMediaGrid: boolean;
 	maximizeMedia: boolean;
+	fileNameFormat: string;
+	datePropFormat: string;
 }
 
 const DEFAULT_SETTINGS: YesterdaySettings = {
@@ -16,7 +20,9 @@ const DEFAULT_SETTINGS: YesterdaySettings = {
 	hideMediaFiles: false,
 	showTodoCount: false,
 	showMediaGrid: true,
-	maximizeMedia: true
+	maximizeMedia: true,
+	fileNameFormat: 'YYYY-MM-DD - HH-mm-ss',
+	datePropFormat: 'YYYY-MM-DD HH:mm:ss Z',
 }
 
 let todoCount = 0;
@@ -205,7 +211,6 @@ export default class Yesterday extends Plugin {
 	todoEventListenersAdded: boolean = false;
 
 	registerFileOperations() {
-
 		if (this.todoEventListenersAdded) return
 
 		this.registerEvent(
@@ -255,27 +260,13 @@ export default class Yesterday extends Plugin {
 	}
 
 	async createEntry(): Promise<void> {
-
-		const now = new Date();
-
-		const year = now.getFullYear();
-		const month = ("0" + (now.getMonth() + 1)).slice(-2);
-		const day = ("0" + now.getDate()).slice(-2);
-		const date = [year, month, day].join("-");
-
-		const hours = ("0" + now.getHours()).slice(-2);
-		const minutes = ("0" + now.getMinutes()).slice(-2);
-		const seconds = ("0" + now.getSeconds()).slice(-2);
-		const time = [hours, minutes, seconds].join("-");
-
-		const timezoneOffsetNumber = now.getTimezoneOffset();
-		const timezoneOffset = ((timezoneOffsetNumber < 0 ? '+' : '-') + pad(Math.abs(timezoneOffsetNumber / 60), 2) + ":" + pad(Math.abs(timezoneOffsetNumber % 60), 2));
+		const now = dayjs();
 
 		const path = getPath();
-		const fileName = path + "/" + date + " - " + time + ".md";
-
+		const fileName = path + "/" + now.format(this.settings.fileNameFormat) + ".md";
 		new Notice("Creating " + fileName);
-		const frontmatter = await createFrontmatter(date + " " + hours + ":" + minutes + ":" + seconds + " " + timezoneOffset, this);
+
+		const frontmatter = await createFrontmatter(now.format(this.settings.datePropFormat), this);
 		new Notice(frontmatter);
 
 		try {
@@ -350,56 +341,37 @@ export default class Yesterday extends Plugin {
 }
 
 function getPath() {
-	const now = new Date();
-	if (now.getHours() < 5) {
-		const yesterday = new Date()
-		yesterday.setDate(now.getDate() - 1);
-		return pathFromDate(yesterday);
+	const now = dayjs();
+	if (now.hour() < 5) {
+		return pathFromDate(now.subtract(1, 'day'));
 	} else {
 		return pathFromDate(now);
 	}
 }
 
-function pathFromDate(date: Date) {
+function pathFromDate(date: Dayjs) {
 	const root = this.app.vault.getRoot().path;
 
-	const year = date.getFullYear();
-	const decade = year.toString().substring(0, 3) + "0s";
-
-	const month = ("0" + (date.getMonth() + 1)).slice(-2);
-	const day = ("0" + date.getDate()).slice(-2);
-
-	const fullMonth = [year, month].join("-");
-	const fullDate = [year, month, day].join("-");
-
-	const components = [decade, year, fullMonth, fullDate].join("/");
+	const components = [
+		date.year().toString().substring(0, 3) + "0s",
+		date.format('YYYY'),
+		date.format('YYYY-MM'),
+		date.format('YYYY-MM-DD'),
+	].join("/");
 
 	return root + components;
 }
 
-async function createFrontmatter(datetime: string, plugin: Yesterday): Promise<string> {
-
-	return `---
-date: ${datetime}
----
-
-`
+async function createFrontmatter(datetime: string, _plugin: Yesterday): Promise<string> {
+	return `---\ndate: ${datetime}\n---\n\n`
 }
 
 async function runCommand(command: string) {
 	const util = require('util');
 	const exec = util.promisify(require('child_process').exec);
-	const { stdout, stderr } = await exec(command);
+	const { stdout } = await exec(command);
 
 	return stdout
-}
-
-function pad(number: number, length: number) {
-	let str = "" + number
-	while (str.length < length) {
-		str = '0' + str
-	}
-	return str
 }
 
 class YesterdaySettingTab extends PluginSettingTab {
@@ -471,6 +443,34 @@ class YesterdaySettingTab extends PluginSettingTab {
 				.setValue(this.plugin.settings.maximizeMedia)
 				.onChange(async (value) => {
 					this.plugin.settings.maximizeMedia = value;
+					await this.plugin.saveSettings();
+				}));
+
+		containerEl.createEl('br');
+		const timeFormatSection = containerEl.createEl('div', {cls: 'setting-item setting-item-heading'});
+		const timeFormatSectionInfo =  timeFormatSection.createEl('div', {cls: 'setting-item-info'});
+		timeFormatSectionInfo.createEl('div', {text: 'Time format', cls: 'setting-item-name'});
+		const subHeading = containerEl.createDiv()
+		subHeading.createEl('a', {text: 'Format documentation', href: 'https://day.js.org/docs/en/display/format'});
+		containerEl.createEl('br');
+
+		new Setting(containerEl)
+			.setName('Filename format')
+			.setDesc('Format of entry\'s filename')
+			.addMomentFormat(toggle => toggle
+				.setValue(this.plugin.settings.fileNameFormat)
+				.onChange(async (value) => {
+					this.plugin.settings.fileNameFormat = value;
+					await this.plugin.saveSettings();
+				}));
+
+		new Setting(containerEl)
+			.setName('Format of \'date\' property')
+			.setDesc('Format of value which will be written to \'date\' property of newly created entry')
+			.addMomentFormat(toggle => toggle
+				.setValue(this.plugin.settings.datePropFormat)
+				.onChange(async (value) => {
+					this.plugin.settings.datePropFormat = value;
 					await this.plugin.saveSettings();
 				}));
 	}
