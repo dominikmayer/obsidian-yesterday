@@ -13,6 +13,7 @@ interface YesterdaySettings {
 	maximizeMedia: boolean;
 	fileNameFormat: string;
 	datePropFormat: string;
+	startOfNextDay: number;
 }
 
 const DEFAULT_SETTINGS: YesterdaySettings = {
@@ -23,6 +24,7 @@ const DEFAULT_SETTINGS: YesterdaySettings = {
 	maximizeMedia: true,
 	fileNameFormat: 'YYYY-MM-DD - HH-mm-ss',
 	datePropFormat: 'YYYY-MM-DD HH:mm:ss Z',
+	startOfNextDay: 5,
 }
 
 let todoCount = 0;
@@ -260,9 +262,8 @@ export default class Yesterday extends Plugin {
 	}
 
 	async createEntry(): Promise<void> {
+		const path = getPath(this.settings.startOfNextDay);
 		const now = dayjs();
-
-		const path = getPath();
 		const fileName = path + "/" + now.format(this.settings.fileNameFormat) + ".md";
 		new Notice("Creating " + fileName);
 
@@ -340,9 +341,9 @@ export default class Yesterday extends Plugin {
 	}
 }
 
-function getPath() {
+function getPath(startOfNextDay: number) {
 	const now = dayjs();
-	if (now.hour() < 5) {
+	if (now.hour() < startOfNextDay) {
 		return pathFromDate(now.subtract(1, 'day'));
 	} else {
 		return pathFromDate(now);
@@ -353,7 +354,7 @@ function pathFromDate(date: Dayjs) {
 	const root = this.app.vault.getRoot().path;
 
 	const components = [
-		date.year().toString().substring(0, 3) + "0s",
+		date.year().toString().substring(0, 3) + '0s',
 		date.format('YYYY'),
 		date.format('YYYY-MM'),
 		date.format('YYYY-MM-DD'),
@@ -416,6 +417,19 @@ class YesterdaySettingTab extends PluginSettingTab {
 				.setValue(this.plugin.settings.showTodoCount)
 				.onChange(async (value) => {
 					this.plugin.settings.showTodoCount = value;
+					await this.plugin.saveSettings();
+					this.plugin.setStatusBar();
+				}));
+
+		new Setting(containerEl)
+			.setName('Start of next day')
+			.setDesc('In hours after midnight')
+			.addSlider(toggle => toggle
+				.setLimits(0, 23, 1)
+				.setValue(this.plugin.settings.startOfNextDay)
+				.setDynamicTooltip()
+				.onChange(async (value) => {
+					this.plugin.settings.startOfNextDay = value;
 					await this.plugin.saveSettings();
 					this.plugin.setStatusBar();
 				}));
