@@ -76,8 +76,8 @@ export default class Yesterday extends Plugin {
 				let target = event.target as HTMLElement;
 
 				if (
-					target.tagName === 'IMG' && 
-					target.closest('.media-embed') && 
+					target.tagName === 'IMG' &&
+					target.closest('.media-embed') &&
 					this.settings.maximizeMedia
 				) {
 					let imgSrc = (target as HTMLImageElement).src;
@@ -433,9 +433,9 @@ class YesterdaySettingTab extends PluginSettingTab {
 				}));
 
 		containerEl.createEl('br');
-		const mediaSection = containerEl.createEl('div', {cls: 'setting-item setting-item-heading'});
-		const mediaSectionInfo =  mediaSection.createEl('div', {cls: 'setting-item-info'});
-		mediaSectionInfo.createEl('div', {text: 'Media', cls: 'setting-item-name'});
+		const mediaSection = containerEl.createEl('div', { cls: 'setting-item setting-item-heading' });
+		const mediaSectionInfo = mediaSection.createEl('div', { cls: 'setting-item-info' });
+		mediaSectionInfo.createEl('div', { text: 'Media', cls: 'setting-item-name' });
 
 		new Setting(containerEl)
 			.setName('Show media files in a grid')
@@ -459,11 +459,11 @@ class YesterdaySettingTab extends PluginSettingTab {
 				}));
 
 		containerEl.createEl('br');
-		const timeFormatSection = containerEl.createEl('div', {cls: 'setting-item setting-item-heading'});
-		const timeFormatSectionInfo =  timeFormatSection.createEl('div', {cls: 'setting-item-info'});
-		timeFormatSectionInfo.createEl('div', {text: 'Time format', cls: 'setting-item-name'});
+		const timeFormatSection = containerEl.createEl('div', { cls: 'setting-item setting-item-heading' });
+		const timeFormatSectionInfo = timeFormatSection.createEl('div', { cls: 'setting-item-info' });
+		timeFormatSectionInfo.createEl('div', { text: 'Time format', cls: 'setting-item-name' });
 		const subHeading = containerEl.createDiv()
-		subHeading.createEl('a', {text: 'Format documentation', href: 'https://day.js.org/docs/en/display/format'});
+		subHeading.createEl('a', { text: 'Format documentation', href: 'https://day.js.org/docs/en/display/format' });
 		containerEl.createEl('br');
 
 		new Setting(containerEl)
@@ -471,8 +471,14 @@ class YesterdaySettingTab extends PluginSettingTab {
 			.setDesc('Format of value which will be written to \'date\' property of newly created entry')
 			.addMomentFormat(toggle => toggle
 				.setValue(this.plugin.settings.datePropFormat)
-				.onChange(async (value) => {
-					this.plugin.settings.datePropFormat = value;
+				.setDefaultFormat(DEFAULT_SETTINGS.datePropFormat)
+				.onChange(async (v) => {
+					let value = v.trim()
+					if (value != '') {
+						this.plugin.settings.datePropFormat = value;
+					} else {
+						this.plugin.settings.datePropFormat = DEFAULT_SETTINGS.datePropFormat;
+					}
 					await this.plugin.saveSettings();
 				}));
 	}
