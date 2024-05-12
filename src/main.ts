@@ -265,7 +265,7 @@ export default class Yesterday extends Plugin {
 		const fileName = path + "/" + now.format('YYYY-MM-DD - HH-mm-ss') + ".md";
 		new Notice("Creating " + fileName);
 
-		const frontmatter = await createFrontmatter(now.format(this.settings.datePropFormat), this);
+		const frontmatter = await createFrontmatter(now.format(this.settings.datePropFormat || DEFAULT_SETTINGS.datePropFormat), this);
 		new Notice(frontmatter);
 
 		try {
@@ -458,27 +458,45 @@ class YesterdaySettingTab extends PluginSettingTab {
 					await this.plugin.saveSettings();
 				}));
 
-		containerEl.createEl('br');
-		const timeFormatSection = containerEl.createEl('div', { cls: 'setting-item setting-item-heading' });
-		const timeFormatSectionInfo = timeFormatSection.createEl('div', { cls: 'setting-item-info' });
-		timeFormatSectionInfo.createEl('div', { text: 'Time format', cls: 'setting-item-name' });
-		const subHeading = containerEl.createDiv()
-		subHeading.createEl('a', { text: 'Format documentation', href: 'https://day.js.org/docs/en/display/format' });
-		containerEl.createEl('br');
+				const timeFormatSection = containerEl.createEl('div', { cls: 'setting-item setting-item-heading' });
+				const timeFormatSectionInfo = timeFormatSection.createEl('div', { cls: 'setting-item-info' });
+				timeFormatSectionInfo.createEl('div', { text: 'Time format', cls: 'setting-item-name' });
+				
+				const timeFormatDescription = timeFormatSectionInfo.createEl('div', { cls: 'setting-item-description' });
+				
+				const timeFormatText = createEl('span', {
+				  text: 'If you change the time format your journal will not work with the '
+				});
+				timeFormatDescription.appendChild(timeFormatText);
+				
+				const appLink = createEl('a', {
+				  text: 'Yesterday app',
+				  href: 'https://www.yesterday.md'
+				});
+				timeFormatText.appendChild(appLink);
+				timeFormatText.appendChild(document.createTextNode('.'));
+				
+				const additionalText = createEl('span', {
+				  text: ' See the '
+				});
+				timeFormatDescription.appendChild(additionalText);
+				
+				const docLink = createEl('a', {
+				  text: 'format documentation',
+				  href: 'https://day.js.org/docs/en/display/format'
+				});
+				additionalText.appendChild(docLink);
+				additionalText.appendChild(document.createTextNode(' for details.'));
 
 		new Setting(containerEl)
-			.setName('Format of \'date\' property')
-			.setDesc('Format of value which will be written to \'date\' property of newly created entry')
-			.addMomentFormat(toggle => toggle
-				.setValue(this.plugin.settings.datePropFormat)
+			.setName('Frontmatter \'date\'')
+			.setDesc('The format of the \'date\' property in the frontmatter of newly created entries')
+			.addMomentFormat(text => text.setPlaceholder(DEFAULT_SETTINGS.datePropFormat)
+				.setValue((this.plugin.settings.datePropFormat || '') + '')
 				.setDefaultFormat(DEFAULT_SETTINGS.datePropFormat)
 				.onChange(async (v) => {
 					let value = v.trim()
-					if (value != '') {
-						this.plugin.settings.datePropFormat = value;
-					} else {
-						this.plugin.settings.datePropFormat = DEFAULT_SETTINGS.datePropFormat;
-					}
+					this.plugin.settings.datePropFormat = value;
 					await this.plugin.saveSettings();
 				}));
 	}

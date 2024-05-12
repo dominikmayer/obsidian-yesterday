@@ -1,6 +1,6 @@
 {
 	"name": "obsidian-yesterday",
-	"version": "1.0.10",
+	"version": "1.0.11",
 	"description": "Plugin that provides Yesterday journaling support to Obsidian",
 	"main": "main.js",
 	"scripts": {
