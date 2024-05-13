@@ -1,4 +1,6 @@
+import dayjs, { Dayjs } from 'dayjs';
 import { App, MarkdownRenderer, Notice, Platform, Plugin, PluginSettingTab, Setting, TFile } from 'obsidian';
+
 import { YesterdayMedia, ImageModal } from "./media"
 import { YesterdayDialog } from "./dialogs"
 import { mediaExtensions } from './constants';
@@ -9,6 +11,8 @@ interface YesterdaySettings {
 	showTodoCount: boolean;
 	showMediaGrid: boolean;
 	maximizeMedia: boolean;
+	datePropFormat: string;
+	startOfNextDay: number;
 }
 
 const DEFAULT_SETTINGS: YesterdaySettings = {
@@ -16,7 +20,9 @@ const DEFAULT_SETTINGS: YesterdaySettings = {
 	hideMediaFiles: false,
 	showTodoCount: false,
 	showMediaGrid: true,
-	maximizeMedia: true
+	maximizeMedia: true,
+	datePropFormat: 'YYYY-MM-DD HH:mm:ss Z',
+	startOfNextDay: 5,
 }
 
 let todoCount = 0;
@@ -70,8 +76,8 @@ export default class Yesterday extends Plugin {
 				let target = event.target as HTMLElement;
 
 				if (
-					target.tagName === 'IMG' && 
-					target.closest('.media-embed') && 
+					target.tagName === 'IMG' &&
+					target.closest('.media-embed') &&
 					this.settings.maximizeMedia
 				) {
 					let imgSrc = (target as HTMLImageElement).src;
@@ -205,7 +211,6 @@ export default class Yesterday extends Plugin {
 	todoEventListenersAdded: boolean = false;
 
 	registerFileOperations() {
-
 		if (this.todoEventListenersAdded) return
 
 		this.registerEvent(
@@ -255,27 +260,12 @@ export default class Yesterday extends Plugin {
 	}
 
 	async createEntry(): Promise<void> {
-
-		const now = new Date();
-
-		const year = now.getFullYear();
-		const month = ("0" + (now.getMonth() + 1)).slice(-2);
-		const day = ("0" + now.getDate()).slice(-2);
-		const date = [year, month, day].join("-");
-
-		const hours = ("0" + now.getHours()).slice(-2);
-		const minutes = ("0" + now.getMinutes()).slice(-2);
-		const seconds = ("0" + now.getSeconds()).slice(-2);
-		const time = [hours, minutes, seconds].join("-");
-
-		const timezoneOffsetNumber = now.getTimezoneOffset();
-		const timezoneOffset = ((timezoneOffsetNumber < 0 ? '+' : '-') + pad(Math.abs(timezoneOffsetNumber / 60), 2) + ":" + pad(Math.abs(timezoneOffsetNumber % 60), 2));
-
-		const path = getPath();
-		const fileName = path + "/" + date + " - " + time + ".md";
-
+		const path = getPath(this.settings.startOfNextDay);
+		const now = dayjs();
+		const fileName = path + "/" + now.format('YYYY-MM-DD - HH-mm-ss') + ".md";
 		new Notice("Creating " + fileName);
-		const frontmatter = await createFrontmatter(date + " " + hours + ":" + minutes + ":" + seconds + " " + timezoneOffset, this);
+
+		const frontmatter = await createFrontmatter(now.format(this.settings.datePropFormat || DEFAULT_SETTINGS.datePropFormat), this);
 		new Notice(frontmatter);
 
 		try {
@@ -349,57 +339,38 @@ export default class Yesterday extends Plugin {
 	}
 }
 
-function getPath() {
-	const now = new Date();
-	if (now.getHours() < 5) {
-		const yesterday = new Date()
-		yesterday.setDate(now.getDate() - 1);
-		return pathFromDate(yesterday);
+function getPath(startOfNextDay: number) {
+	const now = dayjs();
+	if (now.hour() < startOfNextDay) {
+		return pathFromDate(now.subtract(1, 'day'));
 	} else {
 		return pathFromDate(now);
 	}
 }
 
-function pathFromDate(date: Date) {
+function pathFromDate(date: Dayjs) {
 	const root = this.app.vault.getRoot().path;
 
-	const year = date.getFullYear();
-	const decade = year.toString().substring(0, 3) + "0s";
-
-	const month = ("0" + (date.getMonth() + 1)).slice(-2);
-	const day = ("0" + date.getDate()).slice(-2);
-
-	const fullMonth = [year, month].join("-");
-	const fullDate = [year, month, day].join("-");
-
-	const components = [decade, year, fullMonth, fullDate].join("/");
+	const components = [
+		date.year().toString().substring(0, 3) + '0s',
+		date.format('YYYY'),
+		date.format('YYYY-MM'),
+		date.format('YYYY-MM-DD'),
+	].join("/");
 
 	return root + components;
 }
 
-async function createFrontmatter(datetime: string, plugin: Yesterday): Promise<string> {
-
-	return `---
-date: ${datetime}
----
-
-`
+async function createFrontmatter(datetime: string, _plugin: Yesterday): Promise<string> {
+	return `---\ndate: ${datetime}\n---\n\n`
 }
 
 async function runCommand(command: string) {
 	const util = require('util');
 	const exec = util.promisify(require('child_process').exec);
-	const { stdout, stderr } = await exec(command);
+	const { stdout } = await exec(command);
 
 	return stdout
-}
-
-function pad(number: number, length: number) {
-	let str = "" + number
-	while (str.length < length) {
-		str = '0' + str
-	}
-	return str
 }
 
 class YesterdaySettingTab extends PluginSettingTab {
@@ -448,10 +419,23 @@ class YesterdaySettingTab extends PluginSettingTab {
 					this.plugin.setStatusBar();
 				}));
 
+		new Setting(containerEl)
+			.setName('Start of next day')
+			.setDesc('In hours after midnight')
+			.addSlider(toggle => toggle
+				.setLimits(0, 23, 1)
+				.setValue(this.plugin.settings.startOfNextDay)
+				.setDynamicTooltip()
+				.onChange(async (value) => {
+					this.plugin.settings.startOfNextDay = value;
+					await this.plugin.saveSettings();
+					this.plugin.setStatusBar();
+				}));
+
 		containerEl.createEl('br');
-		const mediaSection = containerEl.createEl('div', {cls: 'setting-item setting-item-heading'});
-		const mediaSectionInfo =  mediaSection.createEl('div', {cls: 'setting-item-info'});
-		mediaSectionInfo.createEl('div', {text: 'Media', cls: 'setting-item-name'});
+		const mediaSection = containerEl.createEl('div', { cls: 'setting-item setting-item-heading' });
+		const mediaSectionInfo = mediaSection.createEl('div', { cls: 'setting-item-info' });
+		mediaSectionInfo.createEl('div', { text: 'Media', cls: 'setting-item-name' });
 
 		new Setting(containerEl)
 			.setName('Show media files in a grid')
@@ -471,6 +455,48 @@ class YesterdaySettingTab extends PluginSettingTab {
 				.setValue(this.plugin.settings.maximizeMedia)
 				.onChange(async (value) => {
 					this.plugin.settings.maximizeMedia = value;
+					await this.plugin.saveSettings();
+				}));
+
+				const timeFormatSection = containerEl.createEl('div', { cls: 'setting-item setting-item-heading' });
+				const timeFormatSectionInfo = timeFormatSection.createEl('div', { cls: 'setting-item-info' });
+				timeFormatSectionInfo.createEl('div', { text: 'Time format', cls: 'setting-item-name' });
+				
+				const timeFormatDescription = timeFormatSectionInfo.createEl('div', { cls: 'setting-item-description' });
+				
+				const timeFormatText = createEl('span', {
+				  text: 'If you change the time format your journal will not work with the '
+				});
+				timeFormatDescription.appendChild(timeFormatText);
+				
+				const appLink = createEl('a', {
+				  text: 'Yesterday app',
+				  href: 'https://www.yesterday.md'
+				});
+				timeFormatText.appendChild(appLink);
+				timeFormatText.appendChild(document.createTextNode('.'));
+				
+				const additionalText = createEl('span', {
+				  text: ' See the '
+				});
+				timeFormatDescription.appendChild(additionalText);
+				
+				const docLink = createEl('a', {
+				  text: 'format documentation',
+				  href: 'https://day.js.org/docs/en/display/format'
+				});
+				additionalText.appendChild(docLink);
+				additionalText.appendChild(document.createTextNode(' for details.'));
+
+		new Setting(containerEl)
+			.setName('Frontmatter \'date\'')
+			.setDesc('The format of the \'date\' property in the frontmatter of newly created entries')
+			.addMomentFormat(text => text.setPlaceholder(DEFAULT_SETTINGS.datePropFormat)
+				.setValue((this.plugin.settings.datePropFormat || '') + '')
+				.setDefaultFormat(DEFAULT_SETTINGS.datePropFormat)
+				.onChange(async (v) => {
+					let value = v.trim()
+					this.plugin.settings.datePropFormat = value;
 					await this.plugin.saveSettings();
 				}));
 	}

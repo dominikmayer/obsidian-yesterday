@@ -1,6 +1,6 @@
 {
 	"name": "obsidian-yesterday",
-	"version": "1.0.10",
+	"version": "1.0.11",
 	"description": "Plugin that provides Yesterday journaling support to Obsidian",
 	"main": "main.js",
 	"scripts": {
@@ -19,5 +19,8 @@
 		"obsidian": "^0.12.17",
 		"tslib": "2.3.1",
 		"typescript": "4.4.4"
+	},
+	"dependencies": {
+		"dayjs": "^1.11.11"
 	}
 }
