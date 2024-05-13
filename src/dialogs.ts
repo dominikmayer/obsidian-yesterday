@@ -48,7 +48,8 @@ export class YesterdayDialog extends MarkdownRenderChild {
   onload() {
     this.speakersMap.clear();
     this.allSpeakers.clear();
-    const lines = this.text.split("\n");
+    let lines = this.text.split("\n.");
+    lines = lines.map((entry, index) => (index === 0 ? entry : '.' + entry));
 
     const dialogContainer = this.containerEl.createEl("ul");
     dialogContainer.addClass("yesterday-dialog");
@@ -110,7 +111,6 @@ export class YesterdayDialog extends MarkdownRenderChild {
       metaElement.addClass("dialog-meta");
       line.appendChild(metaElement);
 
-      // Construct the line content. Implementation depends on your format
       if (showSpeaker) {
         speakerElement.textContent = `${speaker}`;
         metaElement.appendChild(speakerElement);
@@ -127,7 +127,7 @@ export class YesterdayDialog extends MarkdownRenderChild {
       line.classList.add("emoji-only");
     }
 
-    statementElement.textContent = `${statement}`;
+    statementElement.innerHTML = statement.replace(/\n/g, "<br>");
     line.appendChild(statementElement);
     this.spokenYet.add(speaker.toLowerCase());
 
@@ -144,7 +144,7 @@ export class YesterdayDialog extends MarkdownRenderChild {
   }
 
   dissectDialogLine(line: string): { speaker: string; comment: string; statement: string } {
-    const regex = /\.?(.*?)(?:\s?\((.*?)\))?:\s?(.*)/;
+    const regex = /^\.([^:(]+)(?:\s?\((.*?)\))?:\s?((?:.|\n)*)/;
     const match = line.match(regex);
     if (match) {
       const [_, speaker, comment = '', statement] = match;
