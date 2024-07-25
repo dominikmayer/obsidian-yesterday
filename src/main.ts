@@ -13,6 +13,7 @@ interface YesterdaySettings {
 	maximizeMedia: boolean;
 	datePropFormat: string;
 	startOfNextDay: number;
+	customRootFolder: string;
 }
 
 const DEFAULT_SETTINGS: YesterdaySettings = {
@@ -23,6 +24,7 @@ const DEFAULT_SETTINGS: YesterdaySettings = {
 	maximizeMedia: true,
 	datePropFormat: 'YYYY-MM-DD HH:mm:ss Z',
 	startOfNextDay: 5,
+	customRootFolder: '',
 }
 
 let todoCount = 0;
@@ -260,7 +262,7 @@ export default class Yesterday extends Plugin {
 	}
 
 	async createEntry(): Promise<void> {
-		const path = getPath(this.settings.startOfNextDay);
+		const path = this.getPath(this.settings.startOfNextDay);
 		const now = dayjs();
 		const fileName = path + "/" + now.format('YYYY-MM-DD - HH-mm-ss') + ".md";
 		new Notice("Creating " + fileName);
@@ -337,28 +339,30 @@ export default class Yesterday extends Plugin {
 	async saveSettings() {
 		await this.saveData(this.settings);
 	}
-}
 
-function getPath(startOfNextDay: number) {
-	const now = dayjs();
-	if (now.hour() < startOfNextDay) {
-		return pathFromDate(now.subtract(1, 'day'));
-	} else {
-		return pathFromDate(now);
+	getPath(startOfNextDay: number) {
+		const now = dayjs();
+		if (now.hour() < startOfNextDay) {
+			return this.pathFromDate(now.subtract(1, 'day'));
+		} else {
+			return this.pathFromDate(now);
+		}
 	}
-}
-
-function pathFromDate(date: Dayjs) {
-	const root = this.app.vault.getRoot().path;
-
-	const components = [
-		date.year().toString().substring(0, 3) + '0s',
-		date.format('YYYY'),
-		date.format('YYYY-MM'),
-		date.format('YYYY-MM-DD'),
-	].join("/");
-
-	return root + components;
+	
+	pathFromDate(date: Dayjs) {
+		const root = this.settings.customRootFolder 
+			? this.app.vault.getRoot().path + '/' + this.settings.customRootFolder
+			: this.app.vault.getRoot().path;
+	
+		const components = [
+			date.year().toString().substring(0, 3) + '0s',
+			date.format('YYYY'),
+			date.format('YYYY-MM'),
+			date.format('YYYY-MM-DD'),
+		].join("/");
+	
+		return root + '/' + components;
+	}
 }
 
 async function createFrontmatter(datetime: string, _plugin: Yesterday): Promise<string> {
@@ -386,6 +390,35 @@ class YesterdaySettingTab extends PluginSettingTab {
 
 		containerEl.empty();
 
+		new Setting(containerEl)
+            .setName('Root folder')
+            .setDesc('Set a custom folder for newly created entries')
+            .addText(text => text
+                .setPlaceholder('/')
+                .setValue(this.plugin.settings.customRootFolder)
+                .onChange(async (value) => {
+                    this.plugin.settings.customRootFolder = value.trim();
+                    await this.plugin.saveSettings();
+                }));
+
+		new Setting(containerEl)
+		.setName('Start of next day')
+		.setDesc('In hours after midnight')
+		.addSlider(toggle => toggle
+			.setLimits(0, 23, 1)
+			.setValue(this.plugin.settings.startOfNextDay)
+			.setDynamicTooltip()
+			.onChange(async (value) => {
+				this.plugin.settings.startOfNextDay = value;
+				await this.plugin.saveSettings();
+				this.plugin.setStatusBar();
+			}));
+	
+		containerEl.createEl('br');
+		const appearanceSection = containerEl.createEl('div', { cls: 'setting-item setting-item-heading' });
+		const appearanceSectionInfo = appearanceSection.createEl('div', { cls: 'setting-item-info' });
+		appearanceSectionInfo.createEl('div', { text: 'Interface', cls: 'setting-item-name' });
+		
 		new Setting(containerEl)
 			.setName('Color entries')
 			.setDesc('Highlights open and resolved entries in different colors')
@@ -415,19 +448,6 @@ class YesterdaySettingTab extends PluginSettingTab {
 				.setValue(this.plugin.settings.showTodoCount)
 				.onChange(async (value) => {
 					this.plugin.settings.showTodoCount = value;
-					await this.plugin.saveSettings();
-					this.plugin.setStatusBar();
-				}));
-
-		new Setting(containerEl)
-			.setName('Start of next day')
-			.setDesc('In hours after midnight')
-			.addSlider(toggle => toggle
-				.setLimits(0, 23, 1)
-				.setValue(this.plugin.settings.startOfNextDay)
-				.setDynamicTooltip()
-				.onChange(async (value) => {
-					this.plugin.settings.startOfNextDay = value;
 					await this.plugin.saveSettings();
 					this.plugin.setStatusBar();
 				}));
