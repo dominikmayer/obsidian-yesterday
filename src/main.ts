@@ -282,7 +282,10 @@ export default class Yesterday extends Plugin {
 				throw new Error("File already exists");
 			}
 			const file = await this.app.vault.create(fileName, frontmatter);
-			this.app.workspace.activeLeaf.openFile(file);
+
+			// Ensure file opens in the main workspace area
+			const leaf = this.app.workspace.getLeaf(true);
+			await leaf.openFile(file);
 		} catch (error) {
 			new Notice(error.toString());
 		}
