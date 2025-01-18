@@ -82,3 +82,8 @@ You can install the plugin from within Obsidian by searching for `Yesterday` in 
 ### Read On
 
 For further information check out [Yesterday](https://www.yesterday.md).
+
+
+### Other Plugins
+
+- [Reader Mode](https://github.com/dominikmayer/obsidian-reader-mode) ensures that notes are opened in reader mode, so you can see dialogs rendered right away.
