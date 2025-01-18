@@ -36,7 +36,7 @@ export class YesterdayDialog extends MarkdownRenderChild {
   ];
 
   allSpeakers: Set<string> = new Set();
-  spokenYet: Set<string> = new Set();
+  lastSpeakerByType: Map<string, string> = new Map();
   lastSpeaker: string = null;
   lastLineElement: HTMLLIElement = null;
 
@@ -48,6 +48,8 @@ export class YesterdayDialog extends MarkdownRenderChild {
   onload() {
     this.speakersMap.clear();
     this.allSpeakers.clear();
+    this.lastSpeakerByType.clear();
+    
     let lines = this.text.split("\n.");
     lines = lines.map((entry, index) => (index === 0 ? entry : '.' + entry));
 
@@ -93,7 +95,8 @@ export class YesterdayDialog extends MarkdownRenderChild {
     if (!speaker) return null; // Skip lines without a speaker
 
     const dialogType = this.speakersMap.get(speaker.toLowerCase()) || "their-dialog";
-    const showSpeaker = !this.spokenYet.has(speaker.toLowerCase());
+    const lastSpeakerOfType = this.lastSpeakerByType.get(dialogType);
+    const showSpeaker = !lastSpeakerOfType || lastSpeakerOfType !== speaker.toLowerCase();
     const hasComment = comment !== "";
 
     const line = document.createElement("li");
@@ -129,7 +132,8 @@ export class YesterdayDialog extends MarkdownRenderChild {
 
     statementElement.innerHTML = statement.replace(/\n/g, "<br>");
     line.appendChild(statementElement);
-    this.spokenYet.add(speaker.toLowerCase());
+    
+    this.lastSpeakerByType.set(dialogType, speaker.toLowerCase());
 
     if (this.lastSpeaker && this.lastSpeaker !== speaker) {
       if (this.lastLineElement) {
