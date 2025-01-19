@@ -87,3 +87,4 @@ For further information check out [Yesterday](https://www.yesterday.md).
 ### Other Plugins
 
 - [Reader Mode](https://github.com/dominikmayer/obsidian-reader-mode) ensures that notes are opened in reader mode, so you can see dialogs rendered right away.
+- [Note ID](https://github.com/dominikmayer/obsidian-note-id) Organizes notes by an ID property, providing a structured way to create and maintain a note sequence, inspired by [Zettelkasten](https://zettelkasten.de/introduction/) principles ("Folgezettel").
