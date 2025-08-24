@@ -1,235 +1,246 @@
 .enable-media-grid .image-grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-left: 0px !important;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	margin-left: 0px !important;
 }
 
 .enable-media-grid .image-grid figure {
-  margin: var(--size-2-1) !important;
-  height: 20vw;
-  position: relative;
-  overflow: hidden;
-  /* Removed flex-grow: 1; to stop figures from trying to fill the available space */
+	margin: var(--size-2-1) !important;
+	height: 20vw;
+	position: relative;
+	overflow: hidden;
+	/* Removed flex-grow: 1; to stop figures from trying to fill the available space */
 }
 
 .enable-media-grid .image-grid img,
 .enable-media-grid .image-grid video {
-  height: 20vw;
-  margin: 0 var(--size-2-1) var(--size-2-1) 0;
-  max-width: 100%;
-  vertical-align: bottom;
-  object-fit: cover;
-  border-radius: var(--radius-xl);
+	height: 20vw;
+	margin: 0 var(--size-2-1) var(--size-2-1) 0;
+	max-width: 100%;
+	vertical-align: bottom;
+	object-fit: cover;
+	border-radius: var(--radius-xl);
 }
 
 .enable-media-grid .is-mobile:not(.is-tablet) .image-grid img,
 .enable-media-grid .is-mobile:not(.is-tablet) .image-grid video {
-  height: 40vw;
+	height: 40vw;
 }
 
 .enable-media-grid .media-embed img:hover {
-  opacity: 0.8;
+	opacity: 0.8;
 }
 
 /* Color entries */
-.color-markdown-files .nav-file-title[data-path$="md"] .nav-file-title-content {
-  color: var(--text-success);
+.color-markdown-files
+	.nav-file-title[data-path$=".md" i]
+	.nav-file-title-content {
+	color: var(--text-success);
 }
 
-.color-markdown-files .nav-file-title[data-path$="todo.md"] .nav-file-title-content {
-  color: var(--text-error);
+.color-markdown-files
+	.nav-file-title[data-path$="todo.md" i]
+	.nav-file-title-content,
+.color-markdown-files
+	.nav-file-title[data-path$="draft.md" i]
+	.nav-file-title-content {
+	color: var(--text-error);
 }
 
 /* Hide media files */
-.hide-media-files .nav-file-title[data-path$='.avi'],
-.hide-media-files .nav-file-title[data-path$='.flac'],
-.hide-media-files .nav-file-title[data-path$='.gif'],
-.hide-media-files .nav-file-title[data-path$='.jpeg'],
-.hide-media-files .nav-file-title[data-path$='.jpg'],
-.hide-media-files .nav-file-title[data-path$='.m4a'],
-.hide-media-files .nav-file-title[data-path$='.m4v'],
-.hide-media-files .nav-file-title[data-path$='.mkv'],
-.hide-media-files .nav-file-title[data-path$='.mov'],
-.hide-media-files .nav-file-title[data-path$='.mp3'],
-.hide-media-files .nav-file-title[data-path$='.mp4'],
-.hide-media-files .nav-file-title[data-path$='.ogg'],
-.hide-media-files .nav-file-title[data-path$='.png'],
-.hide-media-files .nav-file-title[data-path$='.wav'],
-.hide-media-files .nav-file-title[data-path$='.webm'],
-.hide-media-files .nav-file-title[data-path$='.webp'] {
-  display: none;
+.hide-media-files .nav-file-title[data-path$=".avi" i],
+.hide-media-files .nav-file-title[data-path$=".flac" i],
+.hide-media-files .nav-file-title[data-path$=".gif" i],
+.hide-media-files .nav-file-title[data-path$=".heic" i],
+.hide-media-files .nav-file-title[data-path$=".heif" i],
+.hide-media-files .nav-file-title[data-path$=".jpeg" i],
+.hide-media-files .nav-file-title[data-path$=".jpg" i],
+.hide-media-files .nav-file-title[data-path$=".m4a" i],
+.hide-media-files .nav-file-title[data-path$=".m4v" i],
+.hide-media-files .nav-file-title[data-path$=".mkv" i],
+.hide-media-files .nav-file-title[data-path$=".mov" i],
+.hide-media-files .nav-file-title[data-path$=".mp3" i],
+.hide-media-files .nav-file-title[data-path$=".mp4" i],
+.hide-media-files .nav-file-title[data-path$=".ogg" i],
+.hide-media-files .nav-file-title[data-path$=".png" i],
+.hide-media-files .nav-file-title[data-path$=".wav" i],
+.hide-media-files .nav-file-title[data-path$=".webm" i],
+.hide-media-files .nav-file-title[data-path$=".webp" i] {
+	display: none;
 }
 
-.yesterday-todo, .yesterday-todo ~ div {
-  color: var(--text-warning);
+.yesterday-todo,
+.yesterday-todo ~ div {
+	color: var(--text-warning);
 }
 
 /* Hide comments */
 .yesterday-comment,
-.yesterday-comment~div {
-  display: none;
+.yesterday-comment ~ div {
+	display: none;
 }
 
 .callout[data-callout="yesterday-dream"] {
-  --callout-color: 128, 0, 128;
-  --callout-icon: bed-double;
-  border-radius: var(--radius-xl);
+	--callout-color: 128, 0, 128;
+	--callout-icon: bed-double;
+	border-radius: var(--radius-xl);
 }
 
 .callout[data-callout="yesterday-todo"] {
-  --callout-color: 255, 165, 0;
-  --callout-icon: check-check;
+	--callout-color: 255, 165, 0;
+	--callout-icon: check-check;
 }
 
 div {
-  /* Making sure the dialog is not displayed over the text */
-  clear: both;
+	/* Making sure the dialog is not displayed over the text */
+	clear: both;
 }
 
 ul.yesterday-dialog {
-  overflow: hidden; /* Contain floated children without traditional clearfix */
-  margin-top: var(--size-4-9);
-  margin-bottom: var(--size-4-9);
+	overflow: hidden; /* Contain floated children without traditional clearfix */
+	margin-top: var(--size-4-9);
+	margin-bottom: var(--size-4-9);
 
-  padding-inline-start: 0px;
-  padding-left: var(--size-4-9);
-  padding-right: var(--size-4-9);
+	padding-inline-start: 0px;
+	padding-left: var(--size-4-9);
+	padding-right: var(--size-4-9);
 }
 
 .is-mobile ul.yesterday-dialog {
-  padding-left: 0px;
-  padding-right: 0px;
+	padding-left: 0px;
+	padding-right: 0px;
 }
 
 ul.yesterday-dialog li {
-  display: flex;
-  flex-direction: column;
-  clear: both;
-  margin-bottom: 0px;
-  margin-top: var(--size-2-1);
-  padding-bottom: 0px;
-  padding-top: 0px;
+	display: flex;
+	flex-direction: column;
+	clear: both;
+	margin-bottom: 0px;
+	margin-top: var(--size-2-1);
+	padding-bottom: 0px;
+	padding-top: 0px;
 }
 
 ul.yesterday-dialog li p {
-  max-width: calc(100% - 50px);
+	max-width: calc(100% - 50px);
 }
 
 ul.yesterday-dialog li .dialog-meta {
-  display: inline;
-  padding: 0px 0px;
-  margin: 0px;
-  font-size: var(--font-smallest);
+	display: inline;
+	padding: 0px 0px;
+	margin: 0px;
+	font-size: var(--font-smallest);
 }
 
 ul.yesterday-dialog li .dialog-meta {
-  font-size: var(--font-smallest);
-  padding: 0px var(--size-2-2);
-  margin-top: 0px;
-  margin-bottom: 0px;
+	font-size: var(--font-smallest);
+	padding: 0px var(--size-2-2);
+	margin-top: 0px;
+	margin-bottom: 0px;
 }
 
 ul.yesterday-dialog li .dialog-comment {
-  font-style: italic;
+	font-style: italic;
 }
 
-li .dialog-speaker+.dialog-comment::before {
-  content: " (";
+li .dialog-speaker + .dialog-comment::before {
+	content: " (";
 }
 
-li .dialog-speaker+.dialog-comment::after {
-  content: ")";
+li .dialog-speaker + .dialog-comment::after {
+	content: ")";
 }
 
 ul.yesterday-dialog li .dialog-statement {
-  margin-top: 0px;
-  margin-bottom: 0px;
-  padding: var(--size-4-1) var(--size-4-3);
-  border-radius: var(--radius-s);
-  width: fit-content;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	padding: var(--size-4-1) var(--size-4-3);
+	border-radius: var(--radius-s);
+	width: fit-content;
 }
 
 ul.yesterday-dialog li.their-dialog .dialog-meta {
-  padding-left: var(--size-4-2);
+	padding-left: var(--size-4-2);
 }
 
 ul.yesterday-dialog li.my-dialog .dialog-meta {
-  padding-right: var(--size-4-2);
+	padding-right: var(--size-4-2);
 }
 
-ul.yesterday-dialog li.their-dialog.emoji-only .dialog-statement, ul.yesterday-dialog li.my-dialog.emoji-only .dialog-statement {
-  background-color: transparent;
-  padding: 0px;
-  font-size: 2em;
-  line-height: 1em;
+ul.yesterday-dialog li.their-dialog.emoji-only .dialog-statement,
+ul.yesterday-dialog li.my-dialog.emoji-only .dialog-statement {
+	background-color: transparent;
+	padding: 0px;
+	font-size: 2em;
+	line-height: 1em;
 }
 
 ul.yesterday-dialog li.their-dialog .dialog-statement {
-  background: var(--color-base-30);
-  color: var(--color-base-100);
-  border-top-right-radius: var(--radius-xl);
-  border-bottom-right-radius: var(--radius-xl);
+	background: var(--color-base-30);
+	color: var(--color-base-100);
+	border-top-right-radius: var(--radius-xl);
+	border-bottom-right-radius: var(--radius-xl);
 }
 
 ul.yesterday-dialog li.my-dialog {
-  text-align: right;
-  align-items: flex-end;
+	text-align: right;
+	align-items: flex-end;
 }
 
 ul.yesterday-dialog li.my-dialog .dialog-statement {
-  background: var(--interactive-accent);
-  color: var(--text-on-accent);
-  border-top-left-radius: var(--radius-xl);
-  border-bottom-left-radius: var(--radius-xl);
+	background: var(--interactive-accent);
+	color: var(--text-on-accent);
+	border-top-left-radius: var(--radius-xl);
+	border-bottom-left-radius: var(--radius-xl);
 }
 
-.my-dialog+.their-dialog .dialog-statement,
-.their-dialog+.my-dialog .dialog-statement {
-  margin-top: var(--size-4-1);
+.my-dialog + .their-dialog .dialog-statement,
+.their-dialog + .my-dialog .dialog-statement {
+	margin-top: var(--size-4-1);
 }
 
-.my-dialog+.their-dialog .dialog-meta+.dialog-statement,
-.their-dialog+.my-dialog .dialog-meta+.dialog-statement {
-  margin-top: 0px;
+.my-dialog + .their-dialog .dialog-meta + .dialog-statement,
+.their-dialog + .my-dialog .dialog-meta + .dialog-statement {
+	margin-top: 0px;
 }
 
-.their-dialog+.my-dialog .dialog-statement {
-  border-top-right-radius: var(--radius-xl);
+.their-dialog + .my-dialog .dialog-statement {
+	border-top-right-radius: var(--radius-xl);
 }
 
-.my-dialog+.their-dialog .dialog-statement,
-.their-dialog.end-speech+.their-dialog .dialog-statement {
-  border-top-left-radius: var(--radius-xl);
+.my-dialog + .their-dialog .dialog-statement,
+.their-dialog.end-speech + .their-dialog .dialog-statement {
+	border-top-left-radius: var(--radius-xl);
 }
 
 .my-dialog.end-speech .dialog-statement {
-  border-bottom-right-radius: var(--radius-xl);
+	border-bottom-right-radius: var(--radius-xl);
 }
 
 .their-dialog.end-speech .dialog-statement {
-  border-bottom-left-radius: var(--radius-xl);
+	border-bottom-left-radius: var(--radius-xl);
 }
 
 .yesterday-dialog li:nth-child(1 of .my-dialog) .dialog-statement {
-  border-top-right-radius: var(--radius-xl);
+	border-top-right-radius: var(--radius-xl);
 }
 
 .yesterday-dialog li:nth-child(1 of .their-dialog) .dialog-statement {
-  border-top-left-radius: var(--radius-xl);
+	border-top-left-radius: var(--radius-xl);
 }
 
 .yesterday-dialog li:nth-last-child(1 of .their-dialog) .dialog-statement {
-  border-bottom-left-radius: var(--radius-xl);
-  margin-bottom: 1em;
+	border-bottom-left-radius: var(--radius-xl);
+	margin-bottom: 1em;
 }
 
 .yesterday-dialog li:nth-last-child(1 of .my-dialog) .dialog-statement {
-  border-bottom-right-radius: var(--radius-xl);
-  margin-bottom: 1em;
+	border-bottom-right-radius: var(--radius-xl);
+	margin-bottom: 1em;
 }
 
 .yesterday-dialog li:nth-last-child(1 of .their-dialog) .dialog-statement {
-  border-bottom-left-radius: var(--radius-xl);
-  margin-bottom: 1em;
+	border-bottom-left-radius: var(--radius-xl);
+	margin-bottom: 1em;
 }
