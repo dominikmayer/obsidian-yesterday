@@ -23,6 +23,7 @@ interface YesterdaySettings {
 	datePropFormat: string;
 	startOfNextDay: number;
 	customRootFolder: string;
+	customUserSpeaker: string;
 }
 
 const DEFAULT_SETTINGS: YesterdaySettings = {
@@ -34,6 +35,7 @@ const DEFAULT_SETTINGS: YesterdaySettings = {
 	datePropFormat: "YYYY-MM-DD HH:mm:ss Z",
 	startOfNextDay: 5,
 	customRootFolder: "",
+	customUserSpeaker: ""
 };
 
 const DRAFT_SUFFIX = " - draft";
@@ -183,7 +185,7 @@ export default class Yesterday extends Plugin {
 
 				if (isDialog) {
 					context.addChild(
-						new YesterdayDialog(element as HTMLElement, text),
+						new YesterdayDialog(element as HTMLElement, text, this.settings.customUserSpeaker),
 					);
 				}
 
@@ -602,7 +604,7 @@ class YesterdaySettingTab extends PluginSettingTab {
 						await this.plugin.saveSettings();
 					}),
 			);
-
+		
 		const timeFormatSection = containerEl.createEl("div", {
 			cls: "setting-item setting-item-heading",
 		});
@@ -658,5 +660,18 @@ class YesterdaySettingTab extends PluginSettingTab {
 						await this.plugin.saveSettings();
 					}),
 			);
+
+		new Setting(containerEl)
+		.setName("Custom My Dialog Idenfier")
+		.setDesc("Set a word to identify yourself in conversation")
+		.addText((text) =>
+			text
+				.setPlaceholder("Bob")
+				.setValue(this.plugin.settings.customUserSpeaker)
+				.onChange(async (value) => {
+					this.plugin.settings.customUserSpeaker = value.trim();
+					await this.plugin.saveSettings();
+				}),
+		);	
 	}
 }
