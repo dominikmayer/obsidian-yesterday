@@ -39,15 +39,18 @@ export class YesterdayDialog extends MarkdownRenderChild {
 		"tôi",
 		"mình", // Vietnamese
 	];
-
+	
 	allSpeakers: Set<string> = new Set();
 	lastSpeakerByType: Map<string, string> = new Map();
 	lastSpeaker: string | null = null;
 	lastLineElement: HTMLLIElement | null = null;
 
-	constructor(containerEl: HTMLElement, text: string) {
+	constructor(containerEl: HTMLElement, text: string, customUserSpeaker: string) {
 		super(containerEl);
 		this.text = text;
+		if (customUserSpeaker !== ""){
+			this.userSpeakers.push(customUserSpeaker.toLowerCase());
+		}
 	}
 
 	onload() {
