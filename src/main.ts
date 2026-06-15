@@ -71,7 +71,11 @@ let draftCount = 0;
 export default class Yesterday extends Plugin {
 	settings: YesterdaySettings;
 
-	async onload() {
+	onload(): void {
+		void this.initialize();
+	}
+
+	async initialize() {
 		await this.loadSettings();
 
 		this.addRibbonIcons();
