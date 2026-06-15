@@ -144,7 +144,12 @@ export class YesterdayDialog extends MarkdownRenderChild {
 			line.classList.add("emoji-only");
 		}
 
-		statementElement.innerHTML = statement.replace(/\n/g, "<br>");
+		statement.split("\n").forEach((part, index, arr) => {
+				statementElement.appendText(part);
+				if (index < arr.length - 1) {
+					statementElement.appendChild(createEl("br"));
+				}
+			});
 		line.appendChild(statementElement);
 
 		this.lastSpeakerByType.set(dialogType, speaker.toLowerCase());
