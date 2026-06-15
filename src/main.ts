@@ -84,18 +84,18 @@ export default class Yesterday extends Plugin {
 
 	// Creates icons in the left ribbon
 	addRibbonIcons() {
-		const newEntryRibbon = this.addRibbonIcon(
+		const _newEntryRibbon = this.addRibbonIcon(
 			"create-new",
 			"Create entry",
-			(evt: MouseEvent) => {
+			(_evt: MouseEvent) => {
 				void this.createEntry();
 			},
 		);
 
-		const toggleTodoRibbon = this.addRibbonIcon(
+		const _toggleTodoRibbon = this.addRibbonIcon(
 			"checkmark",
 			"Toggle draft/complete",
-			(evt: MouseEvent) => {
+			(_evt: MouseEvent) => {
 				this.toggleDraft();
 			},
 		);
@@ -169,7 +169,6 @@ export default class Yesterday extends Plugin {
 				const isDreamStart = text.startsWith("§§§");
 				const isDreamEnd = text.endsWith("§§§");
 				const isTodoStart = text.startsWith("++");
-				const isTodoEnd = text.endsWith("++");
 
 				if (isMedia) {
 					context.addChild(
@@ -460,13 +459,6 @@ async function createFrontmatter(
 	return `---\ndate: ${datetime}\n---\n\n`;
 }
 
-async function runCommand(command: string) {
-	const util = require("util");
-	const exec = util.promisify(require("child_process").exec);
-	const { stdout } = await exec(command);
-
-	return stdout;
-}
 
 class YesterdaySettingTab extends PluginSettingTab {
 	plugin: Yesterday;
