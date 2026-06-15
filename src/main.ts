@@ -505,10 +505,10 @@ class YesterdaySettingTab extends PluginSettingTab {
 		const appearanceSection = containerEl.createDiv({
 			cls: "setting-item setting-item-heading",
 		});
-		const appearanceSectionInfo = appearanceSection.createEl("div", {
+		const appearanceSectionInfo = appearanceSection.createDiv({
 			cls: "setting-item-info",
 		});
-		appearanceSectionInfo.createEl("div", {
+		appearanceSectionInfo.createDiv({
 			text: "Interface",
 			cls: "setting-item-name",
 		});
@@ -558,10 +558,10 @@ class YesterdaySettingTab extends PluginSettingTab {
 		const mediaSection = containerEl.createDiv({
 			cls: "setting-item setting-item-heading",
 		});
-		const mediaSectionInfo = mediaSection.createEl("div", {
+		const mediaSectionInfo = mediaSection.createDiv({
 			cls: "setting-item-info",
 		});
-		mediaSectionInfo.createEl("div", {
+		mediaSectionInfo.createDiv({
 			text: "Media",
 			cls: "setting-item-name",
 		});
@@ -598,19 +598,19 @@ class YesterdaySettingTab extends PluginSettingTab {
 		const timeFormatSection = containerEl.createDiv({
 			cls: "setting-item setting-item-heading",
 		});
-		const timeFormatSectionInfo = timeFormatSection.createEl("div", {
+		const timeFormatSectionInfo = timeFormatSection.createDiv({
 			cls: "setting-item-info",
 		});
-		timeFormatSectionInfo.createEl("div", {
+		timeFormatSectionInfo.createDiv({
 			text: "Time format",
 			cls: "setting-item-name",
 		});
 
-		const timeFormatDescription = timeFormatSectionInfo.createEl("div", {
+		const timeFormatDescription = timeFormatSectionInfo.createDiv({
 			cls: "setting-item-description",
 		});
 
-		const timeFormatText = createEl("span", {
+		const timeFormatText = createSpan({
 			text: "If you change the time format your journal will not work with the ",
 		});
 		timeFormatDescription.appendChild(timeFormatText);
@@ -622,7 +622,7 @@ class YesterdaySettingTab extends PluginSettingTab {
 		timeFormatText.appendChild(appLink);
 		timeFormatText.appendChild(activeDocument.createTextNode("."));
 
-		const additionalText = createEl("span", {
+		const additionalText = createSpan({
 			text: " See the ",
 		});
 		timeFormatDescription.appendChild(additionalText);

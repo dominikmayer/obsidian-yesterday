@@ -113,7 +113,7 @@ export class YesterdayDialog extends MarkdownRenderChild {
 			!lastSpeakerOfType || lastSpeakerOfType !== speaker.toLowerCase();
 		const hasComment = comment !== "";
 
-		const line = activeDocument.createElement("li");
+		const line = createEl("li");
 
 		const speakerElement = createSpan();
 		speakerElement.addClass("dialog-speaker");
