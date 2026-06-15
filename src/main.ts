@@ -88,7 +88,7 @@ export default class Yesterday extends Plugin {
 			"create-new",
 			"Create entry",
 			(evt: MouseEvent) => {
-				this.createEntry();
+				void this.createEntry();
 			},
 		);
 
@@ -106,7 +106,7 @@ export default class Yesterday extends Plugin {
 			id: "create-entry",
 			name: "Create entry",
 			callback: () => {
-				this.createEntry();
+				void this.createEntry();
 			},
 		});
 
@@ -209,7 +209,7 @@ export default class Yesterday extends Plugin {
 						element.remove();
 					});
 					const container = element.createDiv();
-					MarkdownRenderer.renderMarkdown(
+					void MarkdownRenderer.renderMarkdown(
 						this.dreamContent,
 						container,
 						null,
@@ -381,7 +381,7 @@ export default class Yesterday extends Plugin {
 		const nextBase = isDraftName(base)
 			? stripDraftSuffix(base)
 			: `${base}${DRAFT_SUFFIX}`;
-		this.app.fileManager.renameFile(
+		void this.app.fileManager.renameFile(
 			file,
 			withBasenameWithoutExt(file.path, nextBase),
 		);
