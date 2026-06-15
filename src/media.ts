@@ -15,7 +15,7 @@ export class YesterdayMedia extends MarkdownRenderChild {
    */
   onload() {
     const items = this.text.split("\n").filter(text => text.length > 0);
-    const markdownItems = items.map(YesterdayMedia.createMarkdownImage);
+    const markdownItems = items.map((item) => YesterdayMedia.createMarkdownImage(item));
 
     const container = this.containerEl.createDiv();
     if (items.every(item => !audioExtensions.some(extension => item.endsWith(extension)))) {
