@@ -115,7 +115,7 @@ export class YesterdayDialog extends MarkdownRenderChild {
 
 		const line = activeDocument.createElement("li");
 
-		const speakerElement = createEl("span");
+		const speakerElement = createSpan();
 		speakerElement.addClass("dialog-speaker");
 
 		const statementElement = createEl("p");
@@ -133,7 +133,7 @@ export class YesterdayDialog extends MarkdownRenderChild {
 				metaElement.appendChild(speakerElement);
 			}
 			if (hasComment) {
-				const commentElement = createEl("span");
+				const commentElement = createSpan();
 				commentElement.addClass("dialog-comment");
 				commentElement.textContent = `${comment}`;
 				metaElement.appendChild(commentElement);
