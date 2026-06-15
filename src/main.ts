@@ -510,7 +510,7 @@ class YesterdaySettingTab extends PluginSettingTab {
 			);
 
 		containerEl.createEl("br");
-		const appearanceSection = containerEl.createEl("div", {
+		const appearanceSection = containerEl.createDiv({
 			cls: "setting-item setting-item-heading",
 		});
 		const appearanceSectionInfo = appearanceSection.createEl("div", {
@@ -563,7 +563,7 @@ class YesterdaySettingTab extends PluginSettingTab {
 			);
 
 		containerEl.createEl("br");
-		const mediaSection = containerEl.createEl("div", {
+		const mediaSection = containerEl.createDiv({
 			cls: "setting-item setting-item-heading",
 		});
 		const mediaSectionInfo = mediaSection.createEl("div", {
@@ -603,7 +603,7 @@ class YesterdaySettingTab extends PluginSettingTab {
 					}),
 			);
 
-		const timeFormatSection = containerEl.createEl("div", {
+		const timeFormatSection = containerEl.createDiv({
 			cls: "setting-item setting-item-heading",
 		});
 		const timeFormatSectionInfo = timeFormatSection.createEl("div", {
