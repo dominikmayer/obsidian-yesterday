@@ -121,7 +121,7 @@ export default class Yesterday extends Plugin {
 
 	handleImageClicks() {
 		if (!Platform.isMobile) {
-			this.registerDomEvent(document, "click", (event: MouseEvent) => {
+			this.registerDomEvent(activeDocument, "click", (event: MouseEvent) => {
 				let target = event.target as HTMLElement;
 
 				if (
@@ -400,25 +400,25 @@ export default class Yesterday extends Plugin {
 
 	setHideMediaClasses() {
 		if (this.settings.hideMediaFiles) {
-			document.body.classList.add("hide-media-files");
+			activeDocument.body.classList.add("hide-media-files");
 		} else {
-			document.body.classList.remove("hide-media-files");
+			activeDocument.body.classList.remove("hide-media-files");
 		}
 	}
 
 	setColorClasses() {
 		if (this.settings.colorMarkdownFiles) {
-			document.body.classList.add("color-markdown-files");
+			activeDocument.body.classList.add("color-markdown-files");
 		} else {
-			document.body.classList.remove("color-markdown-files");
+			activeDocument.body.classList.remove("color-markdown-files");
 		}
 	}
 
 	setGridClasses() {
 		if (this.settings.showMediaGrid) {
-			document.body.classList.add("enable-media-grid");
+			activeDocument.body.classList.add("enable-media-grid");
 		} else {
-			document.body.classList.remove("enable-media-grid");
+			activeDocument.body.classList.remove("enable-media-grid");
 		}
 	}
 
@@ -628,7 +628,7 @@ class YesterdaySettingTab extends PluginSettingTab {
 			href: "https://www.yesterday.md",
 		});
 		timeFormatText.appendChild(appLink);
-		timeFormatText.appendChild(document.createTextNode("."));
+		timeFormatText.appendChild(activeDocument.createTextNode("."));
 
 		const additionalText = createEl("span", {
 			text: " See the ",
@@ -640,7 +640,7 @@ class YesterdaySettingTab extends PluginSettingTab {
 			href: "https://day.js.org/docs/en/display/format",
 		});
 		additionalText.appendChild(docLink);
-		additionalText.appendChild(document.createTextNode(" for details."));
+		additionalText.appendChild(activeDocument.createTextNode(" for details."));
 
 		new Setting(containerEl)
 			.setName("Frontmatter 'date'")
