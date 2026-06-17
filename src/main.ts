@@ -88,7 +88,7 @@ export default class Yesterday extends Plugin {
 
 	// Creates icons in the left ribbon
 	addRibbonIcons() {
-		const _newEntryRibbon = this.addRibbonIcon(
+		this.addRibbonIcon(
 			"create-new",
 			"Create entry",
 			(_evt: MouseEvent) => {
@@ -96,7 +96,7 @@ export default class Yesterday extends Plugin {
 			},
 		);
 
-		const _toggleTodoRibbon = this.addRibbonIcon(
+		this.addRibbonIcon(
 			"checkmark",
 			"Toggle draft/complete",
 			(_evt: MouseEvent) => {
@@ -126,14 +126,14 @@ export default class Yesterday extends Plugin {
 	handleImageClicks() {
 		if (!Platform.isMobile) {
 			this.registerDomEvent(activeDocument, "click", (event: MouseEvent) => {
-				let target = event.target as HTMLElement;
+				const target = event.target as HTMLElement;
 
 				if (
 					target.tagName === "IMG" &&
 					target.closest(".media-embed") &&
 					this.settings.maximizeMedia
 				) {
-					let imgSrc = (target as HTMLImageElement).src;
+					const imgSrc = (target as HTMLImageElement).src;
 					new ImageModal(this.app, imgSrc).open();
 				}
 			});
@@ -196,7 +196,7 @@ export default class Yesterday extends Plugin {
 				}
 
 				if (this.inDream) {
-					let textWithoutMarkers = text
+					const textWithoutMarkers = text
 						.replace(/^§§§|§§§$/g, "")
 						.trim();
 					this.dreamContent += `> ${textWithoutMarkers}\n`;
@@ -274,7 +274,7 @@ export default class Yesterday extends Plugin {
 		}
 	}
 
-	draftEventListenersAdded: boolean = false;
+	draftEventListenersAdded = false;
 
 	registerFileOperations() {
 		if (this.draftEventListenersAdded) return;
@@ -648,8 +648,8 @@ class YesterdaySettingTab extends PluginSettingTab {
 					.setPlaceholder(DEFAULT_SETTINGS.datePropFormat)
 					.setValue((this.plugin.settings.datePropFormat || "") + "")
 					.setDefaultFormat(DEFAULT_SETTINGS.datePropFormat)
-					.onChange(async (v) => {
-						let value = v.trim();
+							.onChange(async (v) => {
+								const value = v.trim();
 						this.plugin.settings.datePropFormat = value;
 						await this.plugin.saveSettings();
 					}),

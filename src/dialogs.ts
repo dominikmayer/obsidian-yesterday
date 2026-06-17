@@ -174,7 +174,7 @@ export class YesterdayDialog extends MarkdownRenderChild {
 		const regex = /^\.([^:(]+)(?:\s?\((.*?)\))?:\s?((?:.|\n)*)/;
 		const match = line.match(regex);
 		if (match) {
-			const [_, speaker, comment = "", statement] = match;
+			const [, speaker, comment = "", statement] = match;
 			return {
 				speaker: speaker.trim(),
 				comment: comment.trim(),

@@ -2,11 +2,11 @@
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: center;
-	margin-left: 0px !important;
+	margin-left: 0px;
 }
 
 .enable-media-grid .image-grid figure {
-	margin: var(--size-2-1) !important;
+	margin: var(--size-2-1);
 	height: 20vw;
 	position: relative;
 	overflow: hidden;
